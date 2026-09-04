@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './scroll-to-top.component.html',
-  styleUrl: './scroll-to-top.component.css'
+
 })
 export class ScrollToTopComponent implements OnInit, OnDestroy {
   isVisible = false;
@@ -59,3 +59,4 @@ export class ScrollToTopComponent implements OnInit, OnDestroy {
     });
   }
 }
+

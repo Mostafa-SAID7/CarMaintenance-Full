@@ -1,10 +1,10 @@
 <button
-  class="scroll-to-top-btn"
-  [class.visible]="isVisible"
+  class="fixed bottom-[70px] right-3 sm:bottom-[80px] sm:right-4 md:bottom-[100px] md:right-5 w-10 h-10 sm:w-[45px] sm:h-[45px] md:w-[50px] md:h-[50px] rounded-full bg-gradient-to-br from-primary to-primary/80 text-primary-foreground border-none shadow-lg z-[1000] flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:from-primary/90 hover:to-primary/70 active:translate-y-0 active:scale-95 group"
+  [ngClass]="isVisible ? 'opacity-100 visible translate-y-0 scale-100' : 'opacity-0 invisible translate-y-5 scale-75'"
   (click)="scrollToTop()"
   [attr.aria-label]="'Scroll to top'"
   type="button">
-  <svg class="scroll-icon" fill="currentColor" viewBox="0 0 24 24">
+  <svg class="w-4 h-4 sm:w-[18px] sm:h-[18px] md:w-5 md:h-5 transition-transform duration-300 group-hover:-translate-y-1" fill="currentColor" viewBox="0 0 24 24">
     <path d="M7 14l5-5 5 5z"/>
   </svg>
 </button>

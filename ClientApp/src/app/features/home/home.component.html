@@ -25,14 +25,14 @@
              <app-icon name="car" class="w-5 h-5 mr-2"></app-icon>
              Start Your Journey
            </ui-button>
-           <ui-button variant="outline" size="lg" (click)="scrollToSection('features')" class="bg-transparent border-white text-white hover:bg-white hover:text-primary">
+           <ui-button variant="outline" size="lg" (click)="scrollToSection('features')" class="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-all duration-300">
              <app-icon name="chevron-down" class="w-5 h-5 mr-2"></app-icon>
              Learn More
            </ui-button>
          </div>
        </div>
 
-       <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-96 h-64" @fadeInRight>
+       <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-96 h-64 hidden lg:block" @fadeInRight>
          <div class="relative w-full h-full">
            <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?w=600&h=400&fit=crop" alt="Luxury Car" class="w-full h-full object-cover rounded-3xl shadow-2xl">
            <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 flex justify-between items-center">
@@ -61,36 +61,39 @@
  </section>
 
 <!-- Features Section -->
-<section class="features-section" id="features">
-  <div class="container">
-    <div class="section-header" @fadeInUp>
-      <h2 class="section-title">Why Choose Community Car?</h2>
-      <p class="section-subtitle">Discover the advantages that make us the preferred choice for car rentals</p>
+<section class="py-24 bg-background" id="features">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16" @fadeInUp>
+      <h2 class="text-4xl md:text-5xl font-bold text-foreground mb-4">Why Choose Community Car?</h2>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">Discover the advantages that make us the preferred choice for car rentals</p>
     </div>
 
-    <div class="features-grid" @staggerAnimation>
-      <div class="feature-card" *ngFor="let feature of features; trackBy: trackByFeature" @fadeInUp>
-        <div class="feature-icon">
-          <span class="material-icons {{ feature.color }}">{{ feature.icon }}</span>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" @staggerAnimation>
+      <div class="bg-card text-card-foreground border border-border rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden group" *ngFor="let feature of features; trackBy: trackByFeature" @fadeInUp>
+        <!-- Gradient Top Border on hover -->
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-primary/50 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+        
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+          <span class="material-icons text-3xl">{{ feature.icon }}</span>
         </div>
-        <h3 class="feature-title">{{ feature.title }}</h3>
-        <p class="feature-description">{{ feature.description }}</p>
+        <h3 class="text-xl font-semibold mb-4 text-foreground">{{ feature.title }}</h3>
+        <p class="text-muted-foreground leading-relaxed">{{ feature.description }}</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Statistics Section -->
-<section class="stats-section">
-  <div class="container">
-    <div class="stats-grid" @staggerAnimation>
-      <div class="stat-card" *ngFor="let stat of statistics; trackBy: trackByStat" @counterAnimation>
-        <div class="stat-icon">
-          <span class="material-icons {{ stat.color }}">{{ stat.icon }}</span>
+<section class="py-20 bg-gradient-to-br from-primary to-primary/90 text-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" @staggerAnimation>
+      <div class="text-center p-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20" *ngFor="let stat of statistics; trackBy: trackByStat" @counterAnimation>
+        <div class="mb-4 text-white">
+          <span class="material-icons text-5xl opacity-90">{{ stat.icon }}</span>
         </div>
-        <div class="stat-content">
-          <div class="stat-number">{{ stat.value }}{{ stat.suffix }}</div>
-          <div class="stat-label">{{ stat.label }}</div>
+        <div>
+          <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500 mb-2">{{ stat.value }}{{ stat.suffix }}</div>
+          <div class="text-lg font-medium text-white/90">{{ stat.label }}</div>
         </div>
       </div>
     </div>
@@ -98,46 +101,47 @@
 </section>
 
 <!-- Testimonials Section -->
-<section class="testimonials-section" id="testimonials">
-  <div class="container">
-    <div class="section-header" @fadeInUp>
-      <h2 class="section-title">What Our Customers Say</h2>
-      <p class="section-subtitle">Real experiences from real customers who trust Community Car</p>
+<section class="py-24 bg-background" id="testimonials">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16" @fadeInUp>
+      <h2 class="text-4xl md:text-5xl font-bold text-foreground mb-4">What Our Customers Say</h2>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">Real experiences from real customers who trust Community Car</p>
     </div>
 
-    <div class="testimonials-carousel" @fadeInUp>
-      <div class="carousel-container">
-        <div class="testimonial-card" *ngFor="let testimonial of testimonials; let i = index; trackBy: trackByTestimonial"
-             [class.active]="i === currentSlide">
-          <div class="testimonial-content">
-            <div class="testimonial-rating">
-              <div class="stars">
-                <span class="material-icons star" [class.filled]="star === 1" *ngFor="let star of getStars(testimonial.rating)">star</span>
-              </div>
+    <div class="relative max-w-4xl mx-auto" @fadeInUp>
+      <div class="relative h-[400px] sm:h-[350px] overflow-hidden">
+        <div *ngFor="let testimonial of testimonials; let i = index; trackBy: trackByTestimonial"
+             class="absolute inset-0 bg-card border border-border rounded-3xl p-8 sm:p-12 shadow-lg transition-all duration-500 flex flex-col justify-center"
+             [ngClass]="{'opacity-100 translate-x-0 z-10': i === currentSlide, 'opacity-0 translate-x-12 z-0': i !== currentSlide, 'pointer-events-none': i !== currentSlide}">
+          <div class="flex flex-col h-full">
+            <div class="flex gap-1 mb-6">
+              <span class="material-icons text-2xl" [ngClass]="star === 1 ? 'text-yellow-400' : 'text-gray-200'" *ngFor="let star of getStars(testimonial.rating)">star</span>
             </div>
-            <blockquote class="testimonial-text">{{ testimonial.text }}</blockquote>
-            <div class="testimonial-author">
-              <img [src]="testimonial.avatar" [alt]="testimonial.name" class="author-avatar">
-              <div class="author-info">
-                <div class="author-name">{{ testimonial.name }}</div>
-                <div class="author-role">{{ testimonial.role }}</div>
-                <div class="testimonial-date">{{ testimonial.date }}</div>
+            <blockquote class="text-xl sm:text-2xl leading-relaxed italic text-foreground mb-8">"{{ testimonial.text }}"</blockquote>
+            <div class="flex items-center gap-4 mt-auto">
+              <img [src]="testimonial.avatar" [alt]="testimonial.name" class="w-16 h-16 rounded-full object-cover border-2 border-primary">
+              <div>
+                <div class="font-bold text-lg text-foreground">{{ testimonial.name }}</div>
+                <div class="text-sm text-muted-foreground">{{ testimonial.role }}</div>
+                <div class="text-xs text-muted-foreground/70 mt-1">{{ testimonial.date }}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="carousel-controls">
-        <button class="carousel-btn prev-btn" (click)="prevSlide()" aria-label="Previous testimonial">
+      <div class="flex justify-center items-center gap-6 mt-10">
+        <button class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 hover:scale-110 hover:shadow-lg transition-all" (click)="prevSlide()" aria-label="Previous testimonial">
           <span class="material-icons">chevron_left</span>
         </button>
-        <div class="carousel-indicators">
-          <button class="indicator" *ngFor="let testimonial of testimonials; let i = index; trackBy: trackByTestimonial"
-                  [class.active]="i === currentSlide" (click)="goToSlide(i)" [attr.aria-label]="'Go to testimonial ' + (i + 1)">
+        <div class="flex gap-3">
+          <button *ngFor="let testimonial of testimonials; let i = index; trackBy: trackByTestimonial"
+                  class="w-3 h-3 rounded-full transition-all duration-300"
+                  [ngClass]="i === currentSlide ? 'bg-primary scale-125' : 'bg-muted hover:bg-muted-foreground'"
+                  (click)="goToSlide(i)" [attr.aria-label]="'Go to testimonial ' + (i + 1)">
           </button>
         </div>
-        <button class="carousel-btn next-btn" (click)="nextSlide()" aria-label="Next testimonial">
+        <button class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 hover:scale-110 hover:shadow-lg transition-all" (click)="nextSlide()" aria-label="Next testimonial">
           <span class="material-icons">chevron_right</span>
         </button>
       </div>
@@ -146,43 +150,41 @@
 </section>
 
 <!-- CTA Section -->
-<section class="cta-section">
-  <div class="container">
-    <div class="cta-content" @fadeInUp>
-      <h2 class="cta-title">Ready to Hit the Road?</h2>
-      <p class="cta-subtitle">Join thousands of satisfied customers and experience the best car rental service today.</p>
-      <div class="cta-actions">
-        <a routerLink="/register" class="btn btn-primary btn-xl">
-          <span class="material-icons">person_add</span>
-          Get Started Free
-        </a>
-        <a routerLink="/cars" class="btn btn-outline btn-xl">
-          <span class="material-icons">search</span>
-          Browse Cars
-        </a>
-      </div>
+<section class="py-24 bg-gradient-to-br from-primary to-primary/80 text-white text-center">
+  <div class="max-w-3xl mx-auto px-4" @fadeInUp>
+    <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Hit the Road?</h2>
+    <p class="text-xl text-white/90 mb-10 leading-relaxed">Join thousands of satisfied customers and experience the best car rental service today.</p>
+    <div class="flex justify-center gap-4 flex-wrap">
+      <a routerLink="/register" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-primary font-bold text-lg hover:bg-white/90 hover:scale-105 hover:shadow-xl transition-all duration-300">
+        <span class="material-icons">person_add</span>
+        Get Started Free
+      </a>
+      <a routerLink="/cars" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-transparent border-2 border-white text-white font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300">
+        <span class="material-icons">search</span>
+        Browse Cars
+      </a>
     </div>
   </div>
 </section>
 
 <!-- FAQ Section -->
-<section class="faq-section" id="faq">
-  <div class="container">
-    <div class="section-header" @fadeInUp>
-      <h2 class="section-title">Frequently Asked Questions</h2>
-      <p class="section-subtitle">Find answers to common questions about our car rental service</p>
+<section class="py-24 bg-background" id="faq">
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="text-center mb-16" @fadeInUp>
+      <h2 class="text-4xl md:text-5xl font-bold text-foreground mb-4">Frequently Asked Questions</h2>
+      <p class="text-lg text-muted-foreground">Find answers to common questions about our car rental service</p>
     </div>
 
-    <div class="faq-list" @staggerAnimation>
-      <div class="faq-item" *ngFor="let faq of faqs; trackBy: trackByFaq" @fadeInUp>
-        <button class="faq-question" (click)="toggleFAQ(faq)" [attr.aria-expanded]="faq.isOpen">
-          <span class="question-text">{{ faq.question }}</span>
-          <span class="faq-icon" [class.rotated]="faq.isOpen">
+    <div class="space-y-4" @staggerAnimation>
+      <div class="border border-border rounded-xl overflow-hidden hover:shadow-md transition-shadow bg-card" *ngFor="let faq of faqs; trackBy: trackByFaq" @fadeInUp>
+        <button class="w-full p-6 text-left flex justify-between items-center hover:bg-muted/50 transition-colors" (click)="toggleFAQ(faq)" [attr.aria-expanded]="faq.isOpen">
+          <span class="text-lg font-semibold text-foreground pr-8">{{ faq.question }}</span>
+          <span class="text-primary transition-transform duration-300 flex-shrink-0" [ngClass]="{'rotate-180': faq.isOpen}">
             <span class="material-icons">expand_more</span>
           </span>
         </button>
-        <div class="faq-answer" [class.open]="faq.isOpen">
-          <div class="answer-content">
+        <div class="overflow-hidden transition-all duration-300 ease-in-out bg-background" [style.maxHeight]="faq.isOpen ? '500px' : '0'">
+          <div class="p-6 pt-0 text-muted-foreground leading-relaxed">
             <p>{{ faq.answer }}</p>
           </div>
         </div>
@@ -192,63 +194,66 @@
 </section>
 
 <!-- Contact Section -->
-<section class="contact-section" id="contact">
-  <div class="container">
-    <div class="contact-content">
-      <div class="contact-info" @fadeInLeft>
-        <h2 class="contact-title">Get in Touch</h2>
-        <p class="contact-subtitle">Have questions? We're here to help you plan your perfect trip.</p>
+<section class="py-24 bg-background" id="contact">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div @fadeInLeft>
+        <h2 class="text-4xl md:text-5xl font-bold text-foreground mb-4">Get in Touch</h2>
+        <p class="text-xl text-muted-foreground mb-12 leading-relaxed">Have questions? We're here to help you plan your perfect trip.</p>
 
-        <div class="contact-details">
-          <div class="contact-item">
-            <div class="contact-icon">
-              <span class="material-icons">phone</span>
+        <div class="space-y-8">
+          <div class="flex items-start gap-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-white flex items-center justify-center flex-shrink-0 shadow-lg">
+              <span class="material-icons text-3xl">phone</span>
             </div>
-            <div class="contact-text">
-              <h4>Phone Support</h4>
-              <p>+1 (555) 123-4567</p>
-              <p>Mon-Fri: 8AM-8PM EST</p>
+            <div>
+              <h4 class="text-xl font-bold text-foreground mb-1">Phone Support</h4>
+              <p class="text-muted-foreground">+1 (555) 123-4567</p>
+              <p class="text-muted-foreground text-sm mt-1">Mon-Fri: 8AM-8PM EST</p>
             </div>
           </div>
 
-          <div class="contact-item">
-            <div class="contact-icon">
-              <span class="material-icons">email</span>
+          <div class="flex items-start gap-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-white flex items-center justify-center flex-shrink-0 shadow-lg">
+              <span class="material-icons text-3xl">email</span>
             </div>
-            <div class="contact-text">
-              <h4>Email Support</h4>
-              <p>support&#64;communitycar.com</p>
-              <p>We respond within 2 hours</p>
+            <div>
+              <h4 class="text-xl font-bold text-foreground mb-1">Email Support</h4>
+              <p class="text-muted-foreground">support&#64;communitycar.com</p>
+              <p class="text-muted-foreground text-sm mt-1">We respond within 2 hours</p>
             </div>
           </div>
 
-          <div class="contact-item">
-            <div class="contact-icon">
-              <span class="material-icons">location_on</span>
+          <div class="flex items-start gap-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-white flex items-center justify-center flex-shrink-0 shadow-lg">
+              <span class="material-icons text-3xl">location_on</span>
             </div>
-            <div class="contact-text">
-              <h4>Visit Our Office</h4>
-              <p>123 Car Street, Auto City, AC 12345</p>
-              <p>Mon-Fri: 9AM-6PM EST</p>
+            <div>
+              <h4 class="text-xl font-bold text-foreground mb-1">Visit Our Office</h4>
+              <p class="text-muted-foreground">123 Car Street, Auto City, AC 12345</p>
+              <p class="text-muted-foreground text-sm mt-1">Mon-Fri: 9AM-6PM EST</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="contact-form" @fadeInRight>
-        <form class="form-card">
-          <h3>Send us a Message</h3>
-          <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" required>
+      <div @fadeInRight>
+        <form class="bg-card p-8 md:p-10 rounded-3xl shadow-2xl border border-border">
+          <h3 class="text-2xl font-bold text-foreground mb-8 text-center">Send us a Message</h3>
+          
+          <div class="mb-6">
+            <label for="name" class="block text-sm font-semibold text-foreground mb-2">Full Name</label>
+            <input type="text" id="name" name="name" required class="w-full p-4 rounded-xl border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
           </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required>
+          
+          <div class="mb-6">
+            <label for="email" class="block text-sm font-semibold text-foreground mb-2">Email Address</label>
+            <input type="email" id="email" name="email" required class="w-full p-4 rounded-xl border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
           </div>
-          <div class="form-group">
-            <label for="subject">Subject</label>
-            <select id="subject" name="subject" required>
+          
+          <div class="mb-6">
+            <label for="subject" class="block text-sm font-semibold text-foreground mb-2">Subject</label>
+            <select id="subject" name="subject" required class="w-full p-4 rounded-xl border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none">
               <option value="">Select a subject</option>
               <option value="booking">Booking Inquiry</option>
               <option value="support">Technical Support</option>
@@ -256,11 +261,13 @@
               <option value="other">Other</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
+          
+          <div class="mb-8">
+            <label for="message" class="block text-sm font-semibold text-foreground mb-2">Message</label>
+            <textarea id="message" name="message" rows="4" required class="w-full p-4 rounded-xl border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-y"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-block">
+          
+          <button type="submit" class="w-full py-4 rounded-xl bg-primary text-white font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition-all active:scale-[0.98]">
             <span class="material-icons">send</span>
             Send Message
           </button>
@@ -271,18 +278,20 @@
 </section>
 
 <!-- Newsletter Section -->
-<section class="newsletter-section">
-  <div class="container">
-    <div class="newsletter-content" @fadeInUp>
-      <div class="newsletter-icon">
-        <span class="material-icons">mail</span>
+<section class="py-24 border-t border-border bg-background/50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="max-w-3xl mx-auto text-center bg-card p-10 md:p-16 rounded-[2.5rem] shadow-2xl border border-border" @fadeInUp>
+      <div class="w-20 h-20 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-8">
+        <span class="material-icons text-4xl">mail</span>
       </div>
-      <h3>Stay Updated</h3>
-      <p>Subscribe to our newsletter for the latest deals, new car arrivals, and travel tips.</p>
-      <div class="newsletter-form">
-        <input type="email" placeholder="Enter your email address" class="newsletter-input">
-        <button class="btn btn-primary newsletter-btn">
-          <span class="material-icons">arrow_forward</span>
+      <h3 class="text-3xl md:text-4xl font-bold text-foreground mb-4">Stay Updated</h3>
+      <p class="text-lg text-muted-foreground mb-10 leading-relaxed max-w-xl mx-auto">Subscribe to our newsletter for the latest deals, new car arrivals, and exclusive travel tips.</p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+        <input type="email" placeholder="Enter your email address" class="flex-1 p-4 rounded-full border-2 border-border focus:border-primary focus:outline-none bg-background text-foreground text-lg shadow-inner">
+        <button class="h-16 px-8 rounded-full flex items-center justify-center bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all hover:shadow-lg sm:w-auto w-full group">
+          Subscribe
+          <span class="material-icons ml-2 group-hover:translate-x-1 transition-transform">arrow_forward</span>
         </button>
       </div>
     </div>

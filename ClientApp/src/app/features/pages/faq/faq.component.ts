@@ -15,7 +15,7 @@ interface FaqCategory {
 @Component({
   selector: 'app-faq',
   templateUrl: './faq.component.html',
-  styleUrls: ['./faq.component.scss'],
+
   imports: [CommonModule]
 })
 export class FaqComponent {

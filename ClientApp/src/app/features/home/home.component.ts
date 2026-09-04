@@ -316,3 +316,4 @@ export class HomeComponent implements OnInit, OnDestroy {
     return faq.id;
   }
 }
+

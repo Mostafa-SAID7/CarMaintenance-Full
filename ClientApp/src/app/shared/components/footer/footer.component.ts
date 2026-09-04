@@ -31,7 +31,7 @@ interface SocialLink extends FooterLink {
   standalone: true,
   imports: [CommonModule, RouterLink, IconComponent],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.scss'
+
 })
 export class FooterComponent {
   /** Current year for copyright display */
@@ -77,3 +77,4 @@ export class FooterComponent {
   /** TrackBy function for sections */
   trackBySection: TrackByFunction<FooterSection> = (index: number, item: FooterSection) => item.title;
 }
+

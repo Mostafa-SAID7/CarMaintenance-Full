@@ -14,7 +14,7 @@ import { NotificationsStore } from '../../../core/state/notifications.store';
   standalone: true,
   imports: [CommonModule, RouterModule, LanguageSwitcherComponent, TranslatePipe],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+
 })
 export class NavbarComponent implements OnInit {
   currentUser: User | null = null;
@@ -150,3 +150,4 @@ export class NavbarComponent implements OnInit {
     }
   }
 }
+

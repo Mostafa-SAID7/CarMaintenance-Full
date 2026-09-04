@@ -1,56 +1,58 @@
-<footer class="footer" role="contentinfo">
-  <div class="footer-container">
-    <div class="footer-content">
-      <div class="footer-section">
-        <div class="footer-logo">
-          <h3>Community Car</h3>
-          <p>Your trusted car sharing platform</p>
+<footer class="bg-gradient-to-br from-background to-muted border-t border-border text-foreground mt-auto relative overflow-hidden" role="contentinfo">
+  <!-- Top accent line -->
+  <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-primary/50 to-primary opacity-30"></div>
+
+  <div class="max-w-[1200px] mx-auto px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 py-12 md:py-8 lg:grid-cols-[2fr_1fr_1fr_1.5fr]">
+      <div class="animate-fade-in-up [animation-fill-mode:both] delay-[100ms] lg:col-span-1">
+        <div class="mb-4">
+          <h3 class="text-2xl font-bold mb-2 bg-gradient-to-br from-primary to-primary/80 bg-clip-text text-transparent">Community Car</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">Your trusted car sharing platform</p>
         </div>
-        <div class="social-links" role="list" aria-label="Social media links">
+        <div class="flex gap-4 mt-6 justify-center lg:justify-start" role="list" aria-label="Social media links">
           <a *ngFor="let link of socialLinks; trackBy: trackBySocialLink"
              [href]="link.url"
-             class="social-link"
+             class="relative flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground border border-border transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-lg hover:bg-gradient-to-br hover:from-primary hover:to-primary/80 hover:text-primary-foreground hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 active:-translate-y-0.5 active:scale-105 group"
              [attr.aria-label]="link.name + ' - Opens in new tab'"
-             [title]="link.name"
              target="_blank"
              rel="noopener noreferrer"
              role="listitem">
-            <app-icon [name]="link.icon" class="social-icon"></app-icon>
-            <span class="social-tooltip">{{ link.name }}</span>
+            <app-icon [name]="link.icon" class="text-lg transition-all duration-200 group-hover:scale-110"></app-icon>
+            <span class="absolute bottom-full left-1/2 -translate-x-1/2 translate-y-2 bg-popover text-popover-foreground px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap opacity-0 invisible transition-all duration-200 shadow-md border border-border z-[1000] group-hover:opacity-100 group-hover:visible group-hover:-translate-y-2 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:border-t-popover">{{ link.name }}</span>
           </a>
         </div>
       </div>
 
-      <ng-container *ngFor="let section of footerSections; trackBy: trackBySection">
-        <nav class="footer-section" [attr.aria-labelledby]="'footer-' + section.title.toLowerCase().replace(' ', '-')">
-          <h4 [id]="'footer-' + section.title.toLowerCase().replace(' ', '-')">{{ section.title }}</h4>
-          <ul role="list">
+      <ng-container *ngFor="let section of footerSections; let i = index; trackBy: trackBySection">
+        <nav class="animate-fade-in-up [animation-fill-mode:both]" [ngStyle]="{'animation-delay': ((i + 2) * 100) + 'ms'}" [attr.aria-labelledby]="'footer-' + section.title.toLowerCase().replace(' ', '-')">
+          <h4 [id]="'footer-' + section.title.toLowerCase().replace(' ', '-')" class="text-lg font-semibold text-foreground mb-4 relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-[2px] after:bg-gradient-to-r after:from-primary after:to-primary/50 after:rounded-[1px]">{{ section.title }}</h4>
+          <ul role="list" class="space-y-2">
             <li *ngFor="let link of section.links; trackBy: trackByLink" role="listitem">
-              <a [routerLink]="link.url" routerLinkActive="active" [attr.aria-label]="link.name">{{ link.name }}</a>
+              <a [routerLink]="link.url" routerLinkActive="text-primary font-medium" [attr.aria-label]="link.name" class="text-sm text-muted-foreground no-underline transition-all duration-200 hover:text-primary hover:translate-x-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 relative before:content-[''] before:absolute before:-left-4 before:top-1/2 before:-translate-y-1/2 before:w-0 before:h-[1px] before:bg-primary before:transition-all before:duration-200 hover:before:w-2 break-words">{{ link.name }}</a>
             </li>
           </ul>
         </nav>
       </ng-container>
 
-      <div class="footer-section">
-        <h4>Contact Info</h4>
-        <address class="contact-info">
-          <p><strong>Email:</strong> <a href="mailto:support&#64;communitycar.com">support&#64;communitycar.com</a></p>
-          <p><strong>Phone:</strong> <a href="tel:+15551234567">+1 (555) 123-4567</a></p>
-          <p><strong>Address:</strong> 123 Car Street, Auto City, AC 12345</p>
+      <div class="animate-fade-in-up [animation-fill-mode:both] delay-[400ms]">
+        <h4 class="text-lg font-semibold text-foreground mb-4 relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-[2px] after:bg-gradient-to-r after:from-primary after:to-primary/50 after:rounded-[1px]">Contact Info</h4>
+        <address class="not-italic space-y-3">
+          <p class="text-sm text-muted-foreground break-words"><strong class="text-foreground font-semibold">Email:</strong> <a href="mailto:support@communitycar.com" class="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">support&#64;communitycar.com</a></p>
+          <p class="text-sm text-muted-foreground break-words"><strong class="text-foreground font-semibold">Phone:</strong> <a href="tel:+15551234567" class="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">+1 (555) 123-4567</a></p>
+          <p class="text-sm text-muted-foreground break-words"><strong class="text-foreground font-semibold">Address:</strong> 123 Car Street, Auto City, AC 12345</p>
         </address>
       </div>
     </div>
 
-    <div class="footer-bottom">
-      <div class="footer-bottom-content">
-        <p>&copy; {{ currentYear }} Community Car. All rights reserved.</p>
-        <nav class="footer-bottom-links" aria-label="Legal links">
-          <a [routerLink]="'/privacy-policy'" routerLinkActive="active">Privacy Policy</a>
-          <span class="separator" aria-hidden="true">|</span>
-          <a [routerLink]="'/terms-of-service'" routerLinkActive="active">Terms of Service</a>
-          <span class="separator" aria-hidden="true">|</span>
-          <a [routerLink]="'/cookies'" routerLinkActive="active">Cookie Policy</a>
+    <div class="border-t border-border py-6 mt-8">
+      <div class="flex flex-col md:flex-row justify-between items-center flex-wrap gap-4 text-center">
+        <p class="text-sm text-muted-foreground m-0">&copy; {{ currentYear }} Community Car. All rights reserved.</p>
+        <nav class="flex items-center justify-center gap-4" aria-label="Legal links">
+          <a [routerLink]="'/privacy-policy'" routerLinkActive="text-primary font-medium" class="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">Privacy Policy</a>
+          <span class="text-sm text-muted-foreground/50" aria-hidden="true">|</span>
+          <a [routerLink]="'/terms-of-service'" routerLinkActive="text-primary font-medium" class="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">Terms of Service</a>
+          <span class="text-sm text-muted-foreground/50" aria-hidden="true">|</span>
+          <a [routerLink]="'/cookies'" routerLinkActive="text-primary font-medium" class="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">Cookie Policy</a>
         </nav>
       </div>
     </div>

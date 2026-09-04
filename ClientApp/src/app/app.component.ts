@@ -15,8 +15,9 @@ import { NotificationCenterComponent } from './shared/components/notification-ce
     NotificationCenterComponent,
   ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+
 })
 export class AppComponent {
   title = 'Community Car';
 }
+

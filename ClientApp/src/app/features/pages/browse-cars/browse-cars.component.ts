@@ -11,7 +11,7 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
   selector: 'app-browse-cars',
   imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './browse-cars.component.html',
-  styleUrl: './browse-cars.component.scss'
+
 })
 export class BrowseCarsComponent implements OnInit {
   featuredCars: Car[] = [];
@@ -84,3 +84,4 @@ export class BrowseCarsComponent implements OnInit {
     return car.id;
   }
 }
+
