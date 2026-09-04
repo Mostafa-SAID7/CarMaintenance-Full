@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, switchMap, catchError, EMPTY } from 'rxjs';
 import { ChatMessage, ChatConversation, ChatTypingIndicator } from '../models/chat.model';
 import { ChatService } from '../services/chat.service';
 
@@ -56,54 +56,60 @@ export class ChatStore extends ComponentStore<ChatState> {
   readonly loadConversations = this.effect<void>(trigger$ =>
     trigger$.pipe(
       tap(() => this.patchState({ loading: true, error: null })),
-      this.chatService.getConversations(),
-      tap({
-        next: (response) => {
-          if (response.success && response.data) {
-            this.patchState({
-              conversations: response.data,
-              loading: false
-            });
+      switchMap(() => this.chatService.getConversations().pipe(
+        tap({
+          next: (response) => {
+            if (response.success && response.data) {
+              this.patchState({
+                conversations: response.data,
+                loading: false
+              });
+            }
+          },
+          error: (error) => {
+            this.patchState({ error: error.message, loading: false });
           }
-        },
-        error: (error) => {
-          this.patchState({ error: error.message, loading: false });
-        }
-      })
+        }),
+        catchError(() => EMPTY)
+      ))
     )
   );
 
   readonly loadConversation = this.effect<string>(conversationId$ =>
     conversationId$.pipe(
-      this.chatService.getConversation(conversationId$),
-      tap({
-        next: (response) => {
-          if (response.success && response.data) {
-            this.setActiveConversation(response.data);
+      switchMap((id) => this.chatService.getConversation(id).pipe(
+        tap({
+          next: (response) => {
+            if (response.success && response.data) {
+              this.setActiveConversation(response.data);
+            }
+          },
+          error: (error) => {
+            this.patchState({ error: error.message });
           }
-        },
-        error: (error) => {
-          this.patchState({ error: error.message });
-        }
-      })
+        }),
+        catchError(() => EMPTY)
+      ))
     )
   );
 
   readonly loadMessages = this.effect<{ conversationId: string; page?: number; pageSize?: number }>(params$ =>
     params$.pipe(
-      tap(params => {
+      switchMap((params) => {
         const { conversationId, page = 1, pageSize = 50 } = params;
-        this.chatService.getMessages(conversationId, page, pageSize);
-      }),
-      tap({
-        next: (response) => {
-          if (response.success && response.data) {
-            this.addMessages(response.data);
-          }
-        },
-        error: (error) => {
-          this.patchState({ error: error.message });
-        }
+        return this.chatService.getMessages(conversationId, page, pageSize).pipe(
+          tap({
+            next: (response) => {
+              if (response.success && response.data) {
+                this.addMessages(response.data);
+              }
+            },
+            error: (error) => {
+              this.patchState({ error: error.message });
+            }
+          }),
+          catchError(() => EMPTY)
+        );
       })
     )
   );

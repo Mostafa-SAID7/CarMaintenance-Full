@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, switchMap, catchError, EMPTY } from 'rxjs';
 import { Notification } from '../models/notification.model';
 import { NotificationService } from '../services/notification.service';
 
@@ -38,49 +38,53 @@ export class NotificationsStore extends ComponentStore<NotificationsState> {
   readonly loadNotifications = this.effect<void>(trigger$ =>
     trigger$.pipe(
       tap(() => this.patchState({ loading: true, error: null })),
-      this.notificationService.getNotifications(),
-      tap({
-        next: (response) => {
-          if (response.success && response.data) {
+      switchMap(() => this.notificationService.getNotifications().pipe(
+        tap({
+          next: (notifications) => {
             this.patchState({
-              notifications: response.data,
-              unreadCount: response.data.filter(n => !n.isRead).length,
+              notifications: notifications,
+              unreadCount: notifications.filter(n => !n.isRead).length,
               loading: false
             });
+          },
+          error: (error) => {
+            this.patchState({ error: error.message, loading: false });
           }
-        },
-        error: (error) => {
-          this.patchState({ error: error.message, loading: false });
-        }
-      })
+        }),
+        catchError(() => EMPTY)
+      ))
     )
   );
 
   readonly markAsRead = this.effect<string>(notificationId$ =>
     notificationId$.pipe(
-      this.notificationService.markAsRead(notificationId$),
-      tap({
-        next: () => {
-          this.updateNotificationReadStatus(notificationId$, true);
-        },
-        error: (error) => {
-          this.patchState({ error: error.message });
-        }
-      })
+      switchMap((id) => this.notificationService.markAsRead(id).pipe(
+        tap({
+          next: () => {
+            this.updateNotificationReadStatus({ notificationId: id, isRead: true });
+          },
+          error: (error) => {
+            this.patchState({ error: error.message });
+          }
+        }),
+        catchError(() => EMPTY)
+      ))
     )
   );
 
   readonly markAllAsRead = this.effect<void>(trigger$ =>
     trigger$.pipe(
-      this.notificationService.markAllAsRead(),
-      tap({
-        next: () => {
-          this.markAllNotificationsAsRead();
-        },
-        error: (error) => {
-          this.patchState({ error: error.message });
-        }
-      })
+      switchMap(() => this.notificationService.markAllAsRead().pipe(
+        tap({
+          next: () => {
+            this.markAllNotificationsAsRead();
+          },
+          error: (error) => {
+            this.patchState({ error: error.message });
+          }
+        }),
+        catchError(() => EMPTY)
+      ))
     )
   );
 
@@ -94,7 +98,7 @@ export class NotificationsStore extends ComponentStore<NotificationsState> {
 
   // Updaters
   private readonly updateNotificationReadStatus = this.updater(
-    (state, notificationId: string, isRead: boolean) => {
+    (state, { notificationId, isRead }: { notificationId: string, isRead: boolean }) => {
       const notifications = state.notifications.map(notification =>
         notification.id === notificationId
           ? { ...notification, isRead }

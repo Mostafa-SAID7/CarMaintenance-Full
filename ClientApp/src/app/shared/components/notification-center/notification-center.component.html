@@ -71,23 +71,23 @@
       class="notification-item"
       *ngFor="let notification of filteredNotifications; trackBy: trackByNotificationId"
       [ngClass]="{
-        'unread': !notification.read,
-        'priority-high': notification.priority === 'high',
-        'priority-medium': notification.priority === 'medium',
-        'priority-low': notification.priority === 'low'
+        'unread': !notification.isRead,
+        'priority-high': $any(notification).priority === 'high',
+        'priority-medium': $any(notification).priority === 'medium',
+        'priority-low': $any(notification).priority === 'low'
       }"
       [@notificationItem]
     >
       <div class="notification-icon">
         <i [class]="getIconClass(notification.type)"></i>
-        <span class="priority-indicator" *ngIf="notification.priority === 'high'"></span>
+        <span class="priority-indicator" *ngIf="$any(notification).priority === 'high'"></span>
       </div>
 
       <div class="notification-content">
         <div class="notification-title" *ngIf="notification.title">
           {{ notification.title }}
-          <span class="category-tag" *ngIf="notification.category && showCategories">
-            {{ notification.category }}
+          <span class="category-tag" *ngIf="$any(notification).category && showCategories">
+            {{ $any(notification).category }}
           </span>
         </div>
         <div class="notification-message">
@@ -95,10 +95,10 @@
         </div>
         <div class="notification-meta">
           <span class="notification-time">
-            {{ notification.timestamp | dateFormat:'relative' }}
+            {{ notification.createdAt | dateFormat:'relative' }}
           </span>
-          <span class="notification-priority" *ngIf="notification.priority && notification.priority !== 'medium'">
-            {{ notification.priority | titlecase }} Priority
+          <span class="notification-priority" *ngIf="$any(notification).priority && $any(notification).priority !== 'medium'">
+            {{ $any(notification).priority | titlecase }} Priority
           </span>
         </div>
       </div>
@@ -106,7 +106,7 @@
       <div class="notification-actions">
         <button
           class="mark-read-btn"
-          *ngIf="!notification.read"
+          *ngIf="!notification.isRead"
           (click)="markAsRead(notification.id)"
           title="Mark as read"
         >
@@ -114,11 +114,11 @@
         </button>
         <button
           class="action-btn"
-          *ngIf="notification.action"
+          *ngIf="$any(notification).action"
           (click)="onNotificationAction(notification)"
-          [ngClass]="{'primary': notification.action.primary}"
+          [ngClass]="{'primary': $any(notification).action.primary}"
         >
-          {{ notification.action.label }}
+          {{ $any(notification).action.label }}
         </button>
         <button
           class="remove-btn"

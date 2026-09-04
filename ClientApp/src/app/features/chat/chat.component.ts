@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil, combineLatest } from 'rxjs';
+import { Observable, Subject, takeUntil, combineLatest } from 'rxjs';
 import { ChatMessage, ChatConversation, ChatTypingIndicator, MessageType } from '../../core/models/chat.model';
 import { ChatStore } from '../../core/state/chat.store';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
@@ -11,7 +11,7 @@ import { NotificationService } from '../../core/services/notification.service';
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, DateFormatPipe],
+  imports: [CommonModule, FormsModule, DateFormatPipe],
   template: `
     <div class="chat-page">
       <div class="chat-container">
@@ -33,17 +33,19 @@ import { NotificationService } from '../../core/services/notification.service';
               [ngClass]="{ 'active': conversation.id === (activeConversation$ | async)?.id }"
               (click)="selectConversation(conversation)">
               <div class="conversation-avatar">
-                <span>{{ getConversationInitials(conversation) }}</span>
+                <span>{{ getConversationInitials($any(conversation)) }}</span>
               </div>
               <div class="conversation-info">
-                <div class="conversation-name">{{ getConversationName(conversation) }}</div>
+                <div class="conversation-name">{{ getConversationName($any(conversation)) }}</div>
                 <div class="conversation-last-message">
                   {{ conversation.lastMessage?.content || 'No messages yet' }}
                 </div>
               </div>
               <div class="conversation-meta">
                 <span class="conversation-time">
-                  {{ conversation.lastMessage?.timestamp | dateFormat:'short' }}
+                  <ng-container *ngIf="conversation.lastMessage">
+                    {{ $any(conversation.lastMessage.timestamp) | dateFormat:'short' }}
+                  </ng-container>
                 </span>
                 <span *ngIf="conversation.unreadCount > 0" class="unread-badge">
                   {{ conversation.unreadCount }}
@@ -58,10 +60,10 @@ import { NotificationService } from '../../core/services/notification.service';
           <div class="chat-header">
             <div class="chat-partner-info">
               <div class="partner-avatar">
-                <span>{{ getConversationInitials(conversation) }}</span>
+                <span>{{ getConversationInitials($any(conversation)) }}</span>
               </div>
               <div class="partner-details">
-                <h3>{{ getConversationName(conversation) }}</h3>
+                <h3>{{ getConversationName($any(conversation)) }}</h3>
                 <span class="partner-status">Active</span>
               </div>
             </div>
@@ -538,7 +540,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   private typingTimeout: any;
 
   conversations: ChatConversation[] = [];
-  activeConversation$: any;
+  activeConversation$!: Observable<ChatConversation | null>;
   messages: ChatMessage[] = [];
   typingIndicators: ChatTypingIndicator[] = [];
   newMessage = '';
