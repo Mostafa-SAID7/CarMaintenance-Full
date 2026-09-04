@@ -1,51 +1,65 @@
-<div class="otp-container">
-  <div class="otp-card">
-    <h2>Verify Your Account</h2>
-    <p class="subtitle">Enter the 6-digit code sent to <strong>{{ email }}</strong></p>
-
-    <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="otp-form">
-      <div class="form-group">
-        <label for="otp">Verification Code</label>
-        <div class="otp-input-container">
-          <input
-            type="text"
-            id="otp"
-            data-cy="otp-input"
-            formControlName="otp"
-            placeholder="000000"
-            class="otp-input"
-            maxlength="6"
-            [class.error]="otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched"
-            (input)="onOtpInput($event)"
-          >
-        </div>
-        <div class="error-message" *ngIf="otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched">
-          <span *ngIf="otpForm.get('otp')?.errors?.['required']">Please enter the verification code</span>
-          <span *ngIf="otpForm.get('otp')?.errors?.['pattern']">Please enter a valid 6-digit code</span>
-        </div>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-secondary-50 p-4">
+  <div class="w-full max-w-md animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+      <div class="px-8 pt-8 pb-6 text-center">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Verify Your Account</h2>
+        <p class="text-gray-600">Enter the 6-digit code sent to <strong class="text-gray-900">{{ email }}</strong></p>
       </div>
 
-      <button type="submit" data-cy="verify-otp-button" class="btn btn-primary" [disabled]="isLoading || otpForm.invalid">
-        <span *ngIf="isLoading">Verifying...</span>
-        <span *ngIf="!isLoading">Verify Code</span>
-      </button>
-    </form>
+      <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="px-8 pb-8">
+        <div class="space-y-6">
+          <div>
+            <label for="otp" class="block text-sm font-medium text-gray-700 mb-2 text-center">Verification Code</label>
+            <div class="flex justify-center">
+              <input
+                type="text"
+                id="otp"
+                data-cy="otp-input"
+                formControlName="otp"
+                placeholder="000000"
+                class="input text-center text-3xl tracking-[1em] font-mono py-4 w-full transition-colors"
+                maxlength="6"
+                [class]="otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched ? 'border-error-500 focus:ring-error-500' : ''"
+                (input)="onOtpInput($event)"
+              >
+            </div>
+            <div class="mt-2 text-sm text-center text-error-600" *ngIf="otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched">
+              <span *ngIf="otpForm.get('otp')?.errors?.['required']">Please enter the verification code</span>
+              <span *ngIf="otpForm.get('otp')?.errors?.['pattern']">Please enter a valid 6-digit code</span>
+            </div>
+          </div>
 
-    <div class="otp-footer">
-      <p>Didn't receive the code?</p>
-      <button
-        type="button"
-        class="resend-btn"
-        [disabled]="resendDisabled"
-        (click)="resendOtp()"
-      >
-        <span *ngIf="!resendDisabled">Resend Code</span>
-        <span *ngIf="resendDisabled">Resend in {{ countdown }}s</span>
-      </button>
-    </div>
+          <button type="submit" data-cy="verify-otp-button" class="btn btn-primary w-full py-3 text-base font-semibold" [disabled]="isLoading || otpForm.invalid" [class]="(isLoading || otpForm.invalid) ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg transform hover:-translate-y-0.5'">
+            <span *ngIf="isLoading" class="inline-flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Verifying...
+            </span>
+            <span *ngIf="!isLoading">Verify Code</span>
+          </button>
+        </div>
+      </form>
 
-    <div class="back-link">
-      <button type="button" class="btn btn-link" (click)="backToLogin()">Back to Login</button>
+      <div class="px-8 py-6 bg-gray-50/50 border-t border-gray-100 text-center space-y-4">
+        <div>
+          <p class="text-sm text-gray-600 mb-1">Didn't receive the code?</p>
+          <button
+            type="button"
+            class="text-sm font-medium focus:outline-none transition-colors"
+            [ngClass]="resendDisabled ? 'text-gray-400 cursor-not-allowed' : 'text-primary-600 hover:text-primary-500'"
+            [disabled]="resendDisabled"
+            (click)="resendOtp()"
+          >
+            <span *ngIf="!resendDisabled">Resend Code</span>
+            <span *ngIf="resendDisabled">Resend in {{ countdown }}s</span>
+          </button>
+        </div>
+        <div>
+          <button type="button" class="text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors" (click)="backToLogin()">Back to Login</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

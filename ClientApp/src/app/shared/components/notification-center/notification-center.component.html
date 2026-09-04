@@ -1,175 +1,186 @@
 <!-- Notification Bell Button -->
-<div class="notification-bell" (click)="toggleNotificationCenter()">
-  <i class="fas fa-bell"></i>
-  <span class="notification-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
-</div>
+<button class="relative p-2 text-gray-500 hover:text-primary-600 focus:outline-none transition-colors rounded-full hover:bg-primary-50" (click)="toggleNotificationCenter()">
+  <i class="fas fa-bell text-xl"></i>
+  <span class="absolute top-1 right-1 flex items-center justify-center w-5 h-5 bg-error-500 text-white text-[10px] font-bold rounded-full border-2 border-white" *ngIf="unreadCount > 0">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+</button>
+
+<!-- Backdrop -->
+<div
+  class="fixed inset-0 z-40 bg-gray-900/20 backdrop-blur-sm"
+  *ngIf="isOpen"
+  (click)="closeNotificationCenter()"
+  [@fadeIn]
+></div>
 
 <!-- Notification Center Panel -->
 <div
-  class="notification-center"
+  class="fixed z-50 bg-white shadow-2xl rounded-2xl border border-gray-100 flex flex-col overflow-hidden"
   *ngIf="isOpen"
   [@slideInOut]
-  [ngClass]="{'left-position': position === 'left', 'right-position': position === 'right'}"
+  [ngClass]="position === 'left' ? 'left-4' : 'right-4'"
+  [style.top]="'4rem'"
   [style.width]="width"
   [style.max-height]="maxHeight"
 >
-  <div class="notification-header">
-    <h3>Notifications</h3>
-    <div class="header-actions">
+  <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+    <h3 class="font-bold text-gray-900 text-lg">Notifications</h3>
+    <div class="flex items-center space-x-2">
       <button
-        class="clear-all-btn"
+        class="text-xs font-medium text-gray-500 hover:text-primary-600 transition-colors px-2 py-1 rounded hover:bg-primary-50 flex items-center"
         (click)="clearAllNotifications()"
         *ngIf="notifications.length > 0"
         title="Clear all notifications"
       >
-        <i class="fas fa-trash"></i>
+        <i class="fas fa-trash mr-1.5"></i>
         Clear All
       </button>
-      <button class="close-btn" (click)="closeNotificationCenter()" title="Close">
+      <button class="text-gray-400 hover:text-gray-600 focus:outline-none p-1 rounded-full hover:bg-gray-100 transition-colors" (click)="closeNotificationCenter()" title="Close">
         <i class="fas fa-times"></i>
       </button>
     </div>
   </div>
 
   <!-- Search and Filter -->
-  <div class="notification-filters" *ngIf="notifications.length > 0">
-    <div class="search-container">
-      <i class="fas fa-search"></i>
+  <div class="p-4 border-b border-gray-100" *ngIf="notifications.length > 0">
+    <div class="relative mb-3">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <i class="fas fa-search text-gray-400 text-sm"></i>
+      </div>
       <input
         type="text"
         placeholder="Search notifications..."
         [(ngModel)]="searchTerm"
-        class="search-input"
+        class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-all"
       >
     </div>
 
-    <div class="category-filters" *ngIf="showCategories && categories.length > 0">
+    <div class="flex space-x-2 overflow-x-auto pb-1 scrollbar-hide" *ngIf="showCategories && categories.length > 0">
       <button
-        class="category-btn"
-        [ngClass]="{'active': selectedCategory === 'all'}"
+        class="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
+        [ngClass]="selectedCategory === 'all' ? 'bg-primary-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
         (click)="selectedCategory = 'all'"
       >
-        All
-        <span class="category-count" *ngIf="unreadCount > 0">({{ unreadCount }})</span>
+        All <span *ngIf="unreadCount > 0" class="ml-1 opacity-80">({{ unreadCount }})</span>
       </button>
       <button
-        class="category-btn"
+        class="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
         *ngFor="let category of categories"
-        [ngClass]="{'active': selectedCategory === category}"
+        [ngClass]="selectedCategory === category ? 'bg-primary-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
         (click)="selectedCategory = category"
       >
         {{ category | titlecase }}
-        <span class="category-count" *ngIf="unreadCountByCategory[category] > 0">
+        <span *ngIf="unreadCountByCategory[category] > 0" class="ml-1 opacity-80">
           ({{ unreadCountByCategory[category] }})
         </span>
       </button>
     </div>
   </div>
 
-  <div class="notification-list">
+  <div class="flex-1 overflow-y-auto">
     <div
-      class="notification-item"
+      class="group relative p-4 border-b border-gray-50 hover:bg-gray-50 transition-colors flex items-start"
       *ngFor="let notification of filteredNotifications; trackBy: trackByNotificationId"
       [ngClass]="{
-        'unread': !notification.isRead,
-        'priority-high': $any(notification).priority === 'high',
-        'priority-medium': $any(notification).priority === 'medium',
-        'priority-low': $any(notification).priority === 'low'
+        'bg-blue-50/30': !notification.isRead,
+        'border-l-4 border-l-error-500': $any(notification).priority === 'high',
+        'border-l-4 border-l-warning-500': $any(notification).priority === 'medium',
+        'border-l-4 border-l-transparent': $any(notification).priority === 'low' || !$any(notification).priority
       }"
       [@notificationItem]
     >
-      <div class="notification-icon">
-        <i [class]="getIconClass(notification.type)"></i>
-        <span class="priority-indicator" *ngIf="$any(notification).priority === 'high'"></span>
+      <div class="flex-shrink-0 mr-3 mt-0.5">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+             [ngClass]="{
+               'bg-blue-100 text-blue-600': notification.type === 'info',
+               'bg-success-100 text-success-600': notification.type === 'success',
+               'bg-warning-100 text-warning-600': notification.type === 'warning',
+               'bg-error-100 text-error-600': notification.type === 'error'
+             }">
+          <i [class]="getIconClass(notification.type)"></i>
+        </div>
       </div>
 
-      <div class="notification-content">
-        <div class="notification-title" *ngIf="notification.title">
-          {{ notification.title }}
-          <span class="category-tag" *ngIf="$any(notification).category && showCategories">
+      <div class="flex-1 min-w-0 pr-8">
+        <div class="flex items-center space-x-2 mb-1" *ngIf="notification.title">
+          <h4 class="text-sm font-semibold text-gray-900 truncate" [class.font-bold]="!notification.isRead">{{ notification.title }}</h4>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600" *ngIf="$any(notification).category && showCategories">
             {{ $any(notification).category }}
           </span>
         </div>
-        <div class="notification-message">
+        <p class="text-sm text-gray-600 leading-snug mb-2" [class.text-gray-900]="!notification.isRead">
           {{ notification.message }}
-        </div>
-        <div class="notification-meta">
-          <span class="notification-time">
+        </p>
+        <div class="flex items-center text-xs text-gray-400 space-x-3">
+          <span class="flex items-center">
+            <i class="far fa-clock mr-1"></i>
             {{ notification.createdAt | dateFormat:'relative' }}
           </span>
-          <span class="notification-priority" *ngIf="$any(notification).priority && $any(notification).priority !== 'medium'">
-            {{ $any(notification).priority | titlecase }} Priority
-          </span>
+          <span class="text-error-500 font-medium" *ngIf="$any(notification).priority === 'high'">High Priority</span>
+        </div>
+        
+        <div class="mt-3 flex space-x-2" *ngIf="$any(notification).action">
+          <button
+            class="text-xs font-medium px-3 py-1.5 rounded-md transition-colors"
+            (click)="onNotificationAction(notification)"
+            [ngClass]="$any(notification).action.primary ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'"
+          >
+            {{ $any(notification).action.label }}
+          </button>
         </div>
       </div>
 
-      <div class="notification-actions">
+      <div class="absolute right-3 top-4 flex flex-col space-y-1 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
-          class="mark-read-btn"
+          class="w-7 h-7 rounded-full bg-white border border-gray-200 text-gray-400 hover:text-success-600 hover:border-success-200 shadow-sm flex items-center justify-center transition-colors"
           *ngIf="!notification.isRead"
           (click)="markAsRead(notification.id)"
           title="Mark as read"
         >
-          <i class="fas fa-check"></i>
+          <i class="fas fa-check text-xs"></i>
         </button>
         <button
-          class="action-btn"
-          *ngIf="$any(notification).action"
-          (click)="onNotificationAction(notification)"
-          [ngClass]="{'primary': $any(notification).action.primary}"
-        >
-          {{ $any(notification).action.label }}
-        </button>
-        <button
-          class="remove-btn"
+          class="w-7 h-7 rounded-full bg-white border border-gray-200 text-gray-400 hover:text-error-600 hover:border-error-200 shadow-sm flex items-center justify-center transition-colors"
           (click)="removeNotification(notification.id)"
-          title="Remove notification"
+          title="Remove"
         >
-          <i class="fas fa-times"></i>
+          <i class="fas fa-times text-xs"></i>
         </button>
       </div>
+      
+      <!-- Unread dot -->
+      <div class="absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary-500 group-hover:opacity-0 transition-opacity" *ngIf="!notification.isRead"></div>
     </div>
 
     <!-- Empty State -->
-    <div class="empty-state" *ngIf="filteredNotifications.length === 0">
-      <div class="empty-icon">
-        <i class="fas fa-bell-slash"></i>
+    <div class="px-6 py-12 flex flex-col items-center justify-center text-center" *ngIf="filteredNotifications.length === 0">
+      <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+        <i class="fas fa-bell-slash text-2xl text-gray-300"></i>
       </div>
-      <div class="empty-content">
-        <p *ngIf="notifications.length === 0">No notifications yet</p>
-        <p *ngIf="notifications.length > 0 && filteredNotifications.length === 0">No notifications match your search</p>
-        <span *ngIf="notifications.length === 0">You'll see updates here when something happens</span>
-        <span *ngIf="notifications.length > 0 && filteredNotifications.length === 0">Try adjusting your search or filters</span>
-      </div>
+      <h4 class="text-sm font-semibold text-gray-900 mb-1" *ngIf="notifications.length === 0">No notifications yet</h4>
+      <h4 class="text-sm font-semibold text-gray-900 mb-1" *ngIf="notifications.length > 0 && filteredNotifications.length === 0">No matches found</h4>
+      <p class="text-xs text-gray-500" *ngIf="notifications.length === 0">We'll let you know when something important happens.</p>
+      <p class="text-xs text-gray-500" *ngIf="notifications.length > 0 && filteredNotifications.length === 0">Try adjusting your search or category filter.</p>
     </div>
   </div>
 
   <!-- Footer with bulk actions -->
-  <div class="notification-footer" *ngIf="filteredNotifications.length > 0">
-    <div class="bulk-actions">
-      <button
-        class="bulk-action-btn"
-        (click)="clearCategoryNotifications(selectedCategory)"
-        *ngIf="selectedCategory !== 'all'"
-      >
-        <i class="fas fa-trash"></i>
-        Clear {{ selectedCategory | titlecase }}
-      </button>
-      <button
-        class="bulk-action-btn secondary"
-        (click)="markAllAsRead()"
-      >
-        <i class="fas fa-check-double"></i>
-        Mark All Read
-      </button>
-    </div>
+  <div class="p-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between" *ngIf="filteredNotifications.length > 0">
+    <button
+      class="text-xs font-medium text-gray-500 hover:text-error-600 transition-colors flex items-center px-2 py-1.5 rounded hover:bg-error-50"
+      (click)="clearCategoryNotifications(selectedCategory)"
+      *ngIf="selectedCategory !== 'all'"
+    >
+      <i class="fas fa-trash mr-1.5"></i>
+      Clear {{ selectedCategory | titlecase }}
+    </button>
+    <div *ngIf="selectedCategory === 'all'"></div> <!-- Spacer -->
+    
+    <button
+      class="text-xs font-medium text-primary-600 hover:text-primary-700 transition-colors flex items-center px-3 py-1.5 bg-white border border-primary-200 rounded-md shadow-sm hover:bg-primary-50"
+      (click)="markAllAsRead()"
+    >
+      <i class="fas fa-check-double mr-1.5"></i>
+      Mark All Read
+    </button>
   </div>
 </div>
-
-<!-- Backdrop -->
-<div
-  class="notification-backdrop"
-  *ngIf="isOpen"
-  (click)="closeNotificationCenter()"
-  [@fadeIn]
-></div>

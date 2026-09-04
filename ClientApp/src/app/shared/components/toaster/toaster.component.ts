@@ -19,6 +19,10 @@ export class ToasterComponent implements OnInit, OnDestroy {
   @Input() maxToasts: number = 3;
   @Input() defaultPosition: string = 'top-right';
 
+  positions: string[] = [
+    'top-right', 'top-left', 'bottom-right', 'bottom-left', 'top-center', 'bottom-center'
+  ];
+
   currentNotifications: any[] = [];
   private subscription: Subscription = new Subscription();
   private toastQueue: any[] = [];

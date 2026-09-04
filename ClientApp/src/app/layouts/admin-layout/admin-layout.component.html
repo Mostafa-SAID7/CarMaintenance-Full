@@ -1,68 +1,68 @@
-<div class="admin-layout">
+<div class="min-h-screen flex bg-gray-100">
   <!-- Sidebar -->
-  <aside class="admin-sidebar" [class.collapsed]="isSidebarCollapsed">
-    <div class="sidebar-header">
-      <div class="logo">
-        <i class="fas fa-car"></i>
-        <span *ngIf="!isSidebarCollapsed">Community Car</span>
+  <aside class="bg-white shadow-xl flex flex-col transition-all duration-300 z-20" [class]="isSidebarCollapsed ? 'w-20' : 'w-64'">
+    <div class="h-16 flex items-center justify-between px-4 border-b border-gray-200">
+      <div class="flex items-center text-primary-600 space-x-3 overflow-hidden">
+        <i class="fas fa-car text-xl flex-shrink-0"></i>
+        <span *ngIf="!isSidebarCollapsed" class="font-bold text-lg whitespace-nowrap">Community Car</span>
       </div>
-      <button class="sidebar-toggle" (click)="toggleSidebar()">
+      <button class="text-gray-400 hover:text-primary-600 focus:outline-none transition-colors" (click)="toggleSidebar()">
         <i class="fas" [class]="isSidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
       </button>
     </div>
 
-    <nav class="sidebar-nav">
-      <ul class="nav-list">
-        <li class="nav-item">
-          <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link">
-            <i class="fas fa-tachometer-alt"></i>
+    <nav class="flex-1 overflow-y-auto py-4">
+      <ul class="space-y-1 px-3">
+        <li>
+          <a routerLink="/admin/dashboard" routerLinkActive="bg-primary-50 text-primary-700 font-medium" [routerLinkActiveOptions]="{exact: true}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors group">
+            <i class="fas fa-tachometer-alt w-5 text-center group-hover:text-primary-600 transition-colors"></i>
             <span *ngIf="!isSidebarCollapsed">Dashboard</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a routerLink="/admin/users" routerLinkActive="active" class="nav-link">
-            <i class="fas fa-users"></i>
+        <li>
+          <a routerLink="/admin/users" routerLinkActive="bg-primary-50 text-primary-700 font-medium" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors group">
+            <i class="fas fa-users w-5 text-center group-hover:text-primary-600 transition-colors"></i>
             <span *ngIf="!isSidebarCollapsed">Users</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a routerLink="/admin/cars" routerLinkActive="active" class="nav-link">
-            <i class="fas fa-car"></i>
+        <li>
+          <a routerLink="/admin/cars" routerLinkActive="bg-primary-50 text-primary-700 font-medium" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors group">
+            <i class="fas fa-car w-5 text-center group-hover:text-primary-600 transition-colors"></i>
             <span *ngIf="!isSidebarCollapsed">Cars</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a routerLink="/admin/bookings" routerLinkActive="active" class="nav-link">
-            <i class="fas fa-calendar-check"></i>
+        <li>
+          <a routerLink="/admin/bookings" routerLinkActive="bg-primary-50 text-primary-700 font-medium" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors group">
+            <i class="fas fa-calendar-check w-5 text-center group-hover:text-primary-600 transition-colors"></i>
             <span *ngIf="!isSidebarCollapsed">Bookings</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a routerLink="/admin/reports" routerLinkActive="active" class="nav-link">
-            <i class="fas fa-chart-bar"></i>
+        <li>
+          <a routerLink="/admin/reports" routerLinkActive="bg-primary-50 text-primary-700 font-medium" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors group">
+            <i class="fas fa-chart-bar w-5 text-center group-hover:text-primary-600 transition-colors"></i>
             <span *ngIf="!isSidebarCollapsed">Reports</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a routerLink="/admin/settings" routerLinkActive="active" class="nav-link">
-            <i class="fas fa-cog"></i>
+        <li>
+          <a routerLink="/admin/settings" routerLinkActive="bg-primary-50 text-primary-700 font-medium" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors group">
+            <i class="fas fa-cog w-5 text-center group-hover:text-primary-600 transition-colors"></i>
             <span *ngIf="!isSidebarCollapsed">Settings</span>
           </a>
         </li>
       </ul>
     </nav>
 
-    <div class="sidebar-footer">
-      <div class="user-info">
-        <div class="user-avatar">
+    <div class="p-4 border-t border-gray-200">
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold flex-shrink-0">
           {{ getUserInitials() }}
         </div>
-        <div class="user-details" *ngIf="!isSidebarCollapsed">
-          <div class="user-name">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</div>
-          <div class="user-role">Administrator</div>
+        <div class="overflow-hidden" *ngIf="!isSidebarCollapsed">
+          <div class="text-sm font-semibold text-gray-900 truncate">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</div>
+          <div class="text-xs text-gray-500">Administrator</div>
         </div>
       </div>
-      <button class="logout-btn" (click)="logout()" [title]="isSidebarCollapsed ? 'Logout' : ''">
+      <button class="w-full flex items-center justify-center space-x-2 py-2 px-3 bg-gray-50 text-gray-600 rounded-lg hover:bg-error-50 hover:text-error-600 transition-colors group" (click)="logout()" [title]="isSidebarCollapsed ? 'Logout' : ''">
         <i class="fas fa-sign-out-alt"></i>
         <span *ngIf="!isSidebarCollapsed">Logout</span>
       </button>
@@ -70,22 +70,26 @@
   </aside>
 
   <!-- Main Content -->
-  <main class="admin-main" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
     <!-- Header -->
-    <header class="admin-header">
-      <div class="header-left">
-        <h1 class="page-title">Admin Dashboard</h1>
+    <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 flex-shrink-0">
+      <div>
+        <h1 class="text-xl font-bold text-gray-800">Admin Dashboard</h1>
       </div>
-      <div class="header-right">
+      <div class="flex items-center space-x-4">
         <app-notification-center></app-notification-center>
-        <div class="user-menu">
-          <div class="user-avatar">
+        
+        <div class="relative group">
+          <button class="w-10 h-10 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-shadow">
             {{ getUserInitials() }}
-          </div>
-          <div class="user-dropdown">
-            <div class="dropdown-item" (click)="logout()">
-              <i class="fas fa-sign-out-alt"></i>
-              Logout
+          </button>
+          
+          <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
+            <div class="py-1">
+              <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2" (click)="logout()">
+                <i class="fas fa-sign-out-alt text-gray-400"></i>
+                <span>Logout</span>
+              </button>
             </div>
           </div>
         </div>
@@ -93,7 +97,7 @@
     </header>
 
     <!-- Content -->
-    <div class="admin-content">
+    <div class="flex-1 overflow-auto p-6">
       <router-outlet></router-outlet>
     </div>
   </main>

@@ -1,31 +1,29 @@
-<div class="modal-backdrop" *ngIf="isOpen" (click)="onBackdropClick()">
-  <div class="modal-container" [ngClass]="getModalClass()">
-    <div class="modal-dialog" [ngClass]="getDialogClass()" (click)="onModalClick($event)">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header" *ngIf="title || showCloseButton">
-          <h5 class="modal-title" *ngIf="title">{{ title }}</h5>
-          <button
-            type="button"
-            class="modal-close"
-            *ngIf="showCloseButton && closable"
-            (click)="close()"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity duration-300" *ngIf="isOpen" (click)="onBackdropClick()">
+  <div class="relative w-full max-w-lg mx-4 transform transition-all duration-300 scale-100 opacity-100" [ngClass]="getModalClass()" (click)="onModalClick($event)">
+    <div class="bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden" [ngClass]="getDialogClass()">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100" *ngIf="title || showCloseButton">
+        <h5 class="text-xl font-semibold text-gray-900" *ngIf="title">{{ title }}</h5>
+        <button
+          type="button"
+          class="text-gray-400 hover:text-gray-500 hover:bg-gray-100 p-2 rounded-full transition-colors focus:outline-none"
+          *ngIf="showCloseButton && closable"
+          (click)="close()"
+          aria-label="Close"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
 
-        <!-- Modal Body -->
-        <div class="modal-body">
-          <ng-content></ng-content>
-        </div>
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto">
+        <ng-content></ng-content>
+      </div>
 
-        <!-- Modal Footer -->
-        <div class="modal-footer" *ngIf="false">
-          <!-- Footer content can be projected here if needed -->
-          <ng-content select="[modal-footer]"></ng-content>
-        </div>
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 rounded-b-2xl empty:hidden">
+        <ng-content select="[modal-footer]"></ng-content>
       </div>
     </div>
   </div>

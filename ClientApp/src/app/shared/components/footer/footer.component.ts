@@ -1,7 +1,7 @@
 import { Component, TrackByFunction } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { IconComponent } from '../icons/icon.component';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 /**
  * Interface for basic footer links
@@ -29,7 +29,7 @@ interface SocialLink extends FooterLink {
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterLink, IconComponent],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './footer.component.html',
 
 })
@@ -42,28 +42,28 @@ export class FooterComponent {
     { name: 'Facebook', url: '#', icon: 'facebook' },
     { name: 'Twitter', url: '#', icon: 'twitter' },
     { name: 'Instagram', url: '#', icon: 'instagram' },
-    { name: 'LinkedIn', url: '#', icon: 'linkedin' }
+    { name: 'LinkedIn', url: '#', icon: 'linkedin-in' }
   ];
 
   /** Footer sections for dynamic rendering */
   readonly footerSections: readonly FooterSection[] = [
     {
-      title: 'Quick Links',
+      title: 'footer.quickLinks',
       links: [
-        { name: 'About Us', url: '/about-us' },
-        { name: 'Contact', url: '/contact' },
-        { name: 'Privacy Policy', url: '/privacy-policy' },
-        { name: 'Terms of Service', url: '/terms-of-service' },
-        { name: 'FAQ', url: '/faq' }
+        { name: 'footer.aboutUs', url: '/about-us' },
+        { name: 'footer.contact', url: '/contact' },
+        { name: 'footer.privacyPolicy', url: '/privacy-policy' },
+        { name: 'footer.termsOfService', url: '/terms-of-service' },
+        { name: 'footer.faq', url: '/faq' }
       ]
     },
     {
-      title: 'Cars',
+      title: 'footer.cars',
       links: [
-        { name: 'Browse Cars', url: '/browse-cars' },
-        { name: 'Add Your Car', url: '/add-your-car' },
-        { name: 'How It Works', url: '/how-it-works' },
-        { name: 'Pricing', url: '/pricing' }
+        { name: 'footer.browseCars', url: '/browse-cars' },
+        { name: 'footer.addYourCar', url: '/add-your-car' },
+        { name: 'footer.howItWorks', url: '/how-it-works' },
+        { name: 'footer.pricing', url: '/pricing' }
       ]
     }
   ];

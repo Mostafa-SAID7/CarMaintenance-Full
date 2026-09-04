@@ -1,82 +1,78 @@
 <!-- Chat Toggle Button -->
-<div class="chat-toggle" (click)="toggleChat()" [class.has-unread]="unreadCount > 0">
-  <i class="fas fa-comments"></i>
-  <span class="unread-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+<div class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-primary-600 text-white flex items-center justify-center shadow-xl cursor-pointer hover:bg-primary-700 transition-colors z-40 transform hover:scale-105" (click)="toggleChat()" [class.ring-4]="unreadCount > 0" [class.ring-primary-300]="unreadCount > 0" [class.animate-pulse]="unreadCount > 0">
+  <i class="fas fa-comments text-2xl"></i>
+  <span class="absolute -top-1 -right-1 bg-error-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
 </div>
 
 <!-- Chat Window -->
-<div class="chat-window" *ngIf="isOpen" [@slideInOut] [class.minimized]="isMinimized">
+<div class="fixed bottom-24 right-6 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden z-50 transition-all duration-300 origin-bottom-right" *ngIf="isOpen" [@slideInOut] [ngClass]="isMinimized ? 'h-16' : 'h-[32rem] max-h-[calc(100vh-8rem)]'">
   <!-- Chat Header -->
-  <div class="chat-header">
-    <div class="header-info">
-      <div class="agent-status">
-        <span class="status-indicator" [class.online]="isConnected"></span>
-        <span class="status-text">
-          {{ isConnected ? 'Support Online' : 'Connecting...' }}
-        </span>
+  <div class="bg-primary-600 text-white px-4 py-3 flex items-center justify-between cursor-pointer" (click)="isMinimized = !isMinimized">
+    <div class="flex items-center space-x-3">
+      <div class="relative flex items-center justify-center w-10 h-10 bg-primary-500 rounded-full">
+        <i class="fas fa-headset text-xl"></i>
+        <span class="absolute bottom-0 right-0 w-3 h-3 border-2 border-primary-600 rounded-full" [ngClass]="isConnected ? 'bg-success-500' : 'bg-warning-500'"></span>
       </div>
-      <div class="chat-title">Live Support</div>
+      <div>
+        <div class="font-bold text-sm">Live Support</div>
+        <div class="text-xs text-primary-100">{{ isConnected ? 'Online' : 'Connecting...' }}</div>
+      </div>
     </div>
 
-    <div class="header-actions">
-      <button class="minimize-btn" (click)="minimizeChat()" title="Minimize">
+    <div class="flex items-center space-x-2 text-primary-200">
+      <button class="hover:text-white focus:outline-none transition-colors p-1" (click)="minimizeChat(); $event.stopPropagation()" title="Minimize">
         <i class="fas fa-minus"></i>
       </button>
-      <button class="close-btn" (click)="closeChat()" title="Close">
+      <button class="hover:text-white focus:outline-none transition-colors p-1" (click)="closeChat(); $event.stopPropagation()" title="Close">
         <i class="fas fa-times"></i>
       </button>
     </div>
   </div>
 
   <!-- Chat Messages -->
-  <div class="chat-messages" #messagesContainer *ngIf="!isMinimized">
-    <div class="welcome-message" *ngIf="!activeConversation || activeConversation.messages.length === 0">
-      <div class="welcome-content">
+  <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50" #messagesContainer *ngIf="!isMinimized">
+    <div class="flex flex-col items-center justify-center h-full text-center space-y-3 text-gray-500" *ngIf="!activeConversation || activeConversation.messages.length === 0">
+      <div class="w-16 h-16 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-3xl mb-2">
         <i class="fas fa-comments"></i>
-        <h4>Welcome to Live Support!</h4>
-        <p>How can we help you today?</p>
       </div>
+      <h4 class="font-semibold text-gray-800">Welcome to Live Support!</h4>
+      <p class="text-sm">How can we help you today?</p>
     </div>
 
     <div
-      class="message"
+      class="flex w-full"
       *ngFor="let message of activeConversation?.messages; trackBy: trackByMessageId"
-      [ngClass]="{'sent': isMessageFromCurrentUser(message), 'received': !isMessageFromCurrentUser(message)}"
+      [ngClass]="isMessageFromCurrentUser(message) ? 'justify-end' : 'justify-start'"
       [@messageAnimation]
     >
-      <div class="message-avatar" *ngIf="!isMessageFromCurrentUser(message)">
-        <img [src]="message.senderAvatar || '/assets/images/default-avatar.png'" [alt]="message.senderName">
+      <div class="flex-shrink-0 mr-2" *ngIf="!isMessageFromCurrentUser(message)">
+        <img class="w-8 h-8 rounded-full" [src]="message.senderAvatar || '/assets/images/default-avatar.png'" [alt]="message.senderName">
       </div>
 
-      <div class="message-content">
-        <div class="message-bubble">
-          <div class="message-text">{{ message.content }}</div>
-          <div class="message-time">{{ message.timestamp | dateFormat:'time' }}</div>
+      <div class="max-w-[75%] flex flex-col" [ngClass]="isMessageFromCurrentUser(message) ? 'items-end' : 'items-start'">
+        <div class="px-4 py-2 rounded-2xl text-sm" [ngClass]="isMessageFromCurrentUser(message) ? 'bg-primary-600 text-white rounded-br-sm' : 'bg-white border border-gray-100 text-gray-800 rounded-bl-sm shadow-sm'">
+          {{ message.content }}
         </div>
+        <div class="text-[10px] text-gray-400 mt-1 mx-1">{{ message.timestamp | dateFormat:'time' }}</div>
       </div>
     </div>
 
     <!-- Typing Indicator -->
-    <div class="typing-indicator" *ngIf="getTypingUsers().length > 0">
-      <div class="typing-avatar">
-        <i class="fas fa-user-circle"></i>
+    <div class="flex w-full justify-start items-end space-x-2" *ngIf="getTypingUsers().length > 0">
+      <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+        <i class="fas fa-user"></i>
       </div>
-      <div class="typing-bubble">
-        <div class="typing-dots">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <div class="typing-text">
-          {{ getTypingUsers().join(', ') }} {{ getTypingUsers().length === 1 ? 'is' : 'are' }} typing...
-        </div>
+      <div class="bg-white border border-gray-100 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm flex items-center space-x-1">
+        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
       </div>
     </div>
   </div>
 
   <!-- Chat Input -->
-  <div class="chat-input" *ngIf="!isMinimized">
-    <div class="input-container">
+  <div class="border-t border-gray-100 bg-white p-3" *ngIf="!isMinimized">
+    <div class="flex items-end space-x-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:ring-2 focus-within:ring-primary-500 focus-within:border-primary-500 transition-all">
       <textarea
         #messageInput
         [(ngModel)]="currentMessage"
@@ -85,22 +81,24 @@
         placeholder="Type your message..."
         rows="1"
         maxlength="1000"
+        class="flex-1 bg-transparent border-none focus:ring-0 resize-none text-sm p-1 max-h-32 min-h-[24px]"
       ></textarea>
 
       <button
-        class="send-btn"
+        class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white transition-colors"
         (click)="sendMessage()"
         [disabled]="!currentMessage.trim() || !isConnected"
-        [class.active]="currentMessage.trim() && isConnected"
+        [ngClass]="currentMessage.trim() && isConnected ? 'bg-primary-600 hover:bg-primary-700' : 'bg-gray-300 cursor-not-allowed'"
       >
-        <i class="fas fa-paper-plane"></i>
+        <i class="fas fa-paper-plane text-xs"></i>
       </button>
     </div>
 
-    <div class="input-footer">
-      <span class="character-count">{{ currentMessage.length }}/1000</span>
-      <span class="connection-status" [class.connected]="isConnected">
-        {{ isConnected ? 'Connected' : 'Disconnected' }}
+    <div class="flex justify-between items-center mt-2 px-1 text-[10px] text-gray-400">
+      <span>{{ currentMessage.length }}/1000</span>
+      <span class="flex items-center space-x-1">
+        <span class="w-1.5 h-1.5 rounded-full" [ngClass]="isConnected ? 'bg-success-500' : 'bg-error-500'"></span>
+        <span>{{ isConnected ? 'Connected' : 'Disconnected' }}</span>
       </span>
     </div>
   </div>

@@ -1,16 +1,18 @@
-<app-navbar *ngIf="showNavbar"></app-navbar>
+<div class="min-h-screen flex flex-col bg-gray-50">
+  <app-navbar *ngIf="showNavbar" class="flex-none"></app-navbar>
 
-<!-- Network Status Indicator -->
-<app-network-status></app-network-status>
+  <!-- Network Status Indicator -->
+  <app-network-status></app-network-status>
 
-<main class="main-content">
-  <router-outlet></router-outlet>
-</main>
+  <main class="flex-grow w-full max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300">
+    <router-outlet></router-outlet>
+  </main>
 
-<app-footer *ngIf="showFooter"></app-footer>
+  <app-footer *ngIf="showFooter" class="flex-none mt-auto"></app-footer>
 
-<!-- Scroll to Top Button -->
-<app-scroll-to-top *ngIf="showScrollToTop"></app-scroll-to-top>
+  <!-- Scroll to Top Button -->
+  <app-scroll-to-top *ngIf="showScrollToTop"></app-scroll-to-top>
 
-<!-- PWA Install Prompt -->
-<app-pwa-install-prompt></app-pwa-install-prompt>
+  <!-- PWA Install Prompt -->
+  <app-pwa-install-prompt></app-pwa-install-prompt>
+</div>
