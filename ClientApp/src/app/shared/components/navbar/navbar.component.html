@@ -6,6 +6,7 @@
       CARGO
     </a>
 
+    <!-- Desktop Navigation -->
     <!-- Unauthenticated Main Navigation -->
     <nav class="hidden md:flex gap-12 text-sm text-white/50 tracking-wider" *ngIf="!currentUser">
       <a routerLink="/" fragment="about" class="hover:text-white transition-colors duration-300">About Us</a>
@@ -22,19 +23,25 @@
     </nav>
 
     <!-- Right Side Actions -->
-    <div class="flex items-center gap-6">
+    <div class="flex items-center gap-4 md:gap-6">
       
-      <!-- Notification Bell -->
-      <div class="relative" *ngIf="currentUser">
+      <!-- Theme Toggle -->
+      <button class="flex items-center justify-center w-10 h-10 rounded-full bg-transparent border border-white/10 text-white/50 hover:bg-white/5 hover:text-white transition-colors focus:outline-none" (click)="toggleTheme()" title="Toggle Theme">
+        <i class="fa-solid fa-moon text-lg" *ngIf="currentTheme === 'light'"></i>
+        <i class="fa-solid fa-sun text-lg" *ngIf="currentTheme === 'dark'"></i>
+      </button>
+
+      <!-- Notification Bell (Always Visible) -->
+      <div class="relative">
         <button class="flex items-center justify-center w-10 h-10 rounded-full bg-transparent border border-white/10 text-white/50 hover:bg-white/5 hover:text-white transition-colors focus:outline-none" (click)="toggleNotificationMenu()">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <i class="fa-solid fa-bell text-lg"></i>
           <span class="absolute top-0 right-0 bg-[#d4af37] text-[#1a1a1a] text-[9px] font-bold px-1.5 py-0.5 rounded-full" *ngIf="unreadNotificationsCount > 0">
             {{ unreadNotificationsCount > 99 ? '99+' : unreadNotificationsCount }}
           </span>
         </button>
 
         <!-- Notification Dropdown -->
-        <div class="absolute right-0 mt-3 w-80 max-h-[28rem] bg-[#121212] border border-white/10 rounded-xl shadow-2xl z-50 transition-all origin-top-right duration-200" [ngClass]="isNotificationMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 -translate-y-2'">
+        <div class="absolute right-[-40px] md:right-0 mt-3 w-[90vw] max-w-[320px] max-h-[28rem] bg-[#121212] border border-white/10 rounded-xl shadow-2xl z-50 transition-all origin-top-right duration-200" [ngClass]="isNotificationMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 -translate-y-2'">
           <div class="flex items-center justify-between p-4 border-b border-white/10">
             <h3 class="text-sm font-semibold text-white/90">Notifications</h3>
             <button class="text-xs font-medium text-[#e5d4a6] hover:text-white transition-colors" (click)="markAllNotificationsAsRead()" *ngIf="unreadNotificationsCount > 0">
@@ -61,35 +68,94 @@
         </div>
       </div>
 
-      <!-- User Menu -->
-      <div class="relative" *ngIf="currentUser">
+      <!-- User Menu (Authenticated & Unauthenticated) -->
+      <div class="relative hidden md:block">
+        <!-- Avatar Toggle -->
         <button class="flex items-center gap-2 p-1.5 rounded-full border border-white/10 hover:bg-white/5 transition-colors focus:outline-none" (click)="isUserMenuOpen = !isUserMenuOpen">
-          <img *ngIf="currentUser.avatar" [src]="currentUser.avatar" class="w-8 h-8 rounded-full object-cover" />
-          <div *ngIf="!currentUser.avatar" class="w-8 h-8 rounded-full bg-white/10 text-[#e5d4a6] flex items-center justify-center text-xs font-bold">{{ getUserInitials() }}</div>
+          <ng-container *ngIf="currentUser">
+            <img *ngIf="currentUser.avatar" [src]="currentUser.avatar" class="w-8 h-8 rounded-full object-cover" />
+            <div *ngIf="!currentUser.avatar" class="w-8 h-8 rounded-full bg-white/10 text-[#e5d4a6] flex items-center justify-center text-xs font-bold">{{ getUserInitials() }}</div>
+          </ng-container>
+          <ng-container *ngIf="!currentUser">
+            <div class="w-8 h-8 rounded-full bg-white/5 text-white/50 flex items-center justify-center">
+              <i class="fa-solid fa-user text-sm"></i>
+            </div>
+          </ng-container>
         </button>
 
         <!-- User Dropdown Menu -->
         <div class="absolute right-0 mt-3 w-56 bg-[#121212] border border-white/10 rounded-xl shadow-2xl z-50 transition-all origin-top-right duration-200" [ngClass]="isUserMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 -translate-y-2'">
-          <div class="p-4 border-b border-white/10">
-            <div class="text-sm font-semibold text-white/90 truncate">{{ currentUser.name || 'User' }}</div>
-            <div class="text-xs text-white/50 truncate">{{ currentUser.email }}</div>
-          </div>
           
-          <div class="p-2">
-            <a routerLink="/profile" class="flex items-center gap-3 w-full p-2 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-md transition-colors" (click)="isUserMenuOpen = false">
-              Profile Settings
-            </a>
-            <button class="flex items-center gap-3 w-full p-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-md transition-colors mt-1 text-left" (click)="logout()">
-              Sign Out
-            </button>
-          </div>
+          <!-- Authenticated Menu -->
+          <ng-container *ngIf="currentUser">
+            <div class="p-4 border-b border-white/10">
+              <div class="text-sm font-semibold text-white/90 truncate">{{ currentUser.name || 'User' }}</div>
+              <div class="text-xs text-white/50 truncate">{{ currentUser.email }}</div>
+            </div>
+            <div class="p-2">
+              <a routerLink="/profile" class="flex items-center gap-3 w-full p-2 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-md transition-colors" (click)="isUserMenuOpen = false">
+                <i class="fa-solid fa-gear w-4 text-center text-white/30"></i> Profile Settings
+              </a>
+              <button class="flex items-center gap-3 w-full p-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-md transition-colors mt-1 text-left" (click)="logout()">
+                <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center text-red-400/50"></i> Sign Out
+              </button>
+            </div>
+          </ng-container>
+          
+          <!-- Unauthenticated Menu -->
+          <ng-container *ngIf="!currentUser">
+            <div class="p-2 flex flex-col gap-1">
+              <a routerLink="/login" class="flex items-center gap-3 w-full p-2.5 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-colors" (click)="isUserMenuOpen = false">
+                <i class="fa-solid fa-right-to-bracket w-4 text-center text-[#e5d4a6]"></i> Sign In
+              </a>
+              <a routerLink="/register" class="flex items-center gap-3 w-full p-2.5 text-sm font-medium text-[#1a1a1a] bg-gradient-to-r from-[#e5d4a6] to-[#f4ecd8] hover:opacity-90 rounded-lg transition-all" (click)="isUserMenuOpen = false">
+                <i class="fa-solid fa-user-plus w-4 text-center text-[#1a1a1a]"></i> Register
+              </a>
+            </div>
+          </ng-container>
+          
         </div>
       </div>
 
-      <!-- Auth Links -->
-      <div class="hidden md:flex gap-6 items-center text-sm" *ngIf="!currentUser">
-        <a routerLink="/login" class="text-white/50 hover:text-white transition-colors">Sign In</a>
-        <a routerLink="/register" class="px-5 py-2 rounded-lg bg-gradient-to-r from-[#e5d4a6] to-[#f4ecd8] text-[#1a1a1a] font-semibold hover:opacity-90 transition-opacity">Register</a>
+      <!-- Mobile Menu Toggle Button -->
+      <button class="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-transparent border border-white/10 text-white/50 hover:bg-white/5 hover:text-white transition-colors focus:outline-none" (click)="toggleMobileMenu()">
+        <i class="fa-solid fa-bars text-lg" *ngIf="!isMobileMenuOpen"></i>
+        <i class="fa-solid fa-xmark text-lg" *ngIf="isMobileMenuOpen"></i>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown Menu -->
+  <div class="md:hidden absolute w-full bg-[#0a0a0a] border-b border-white/5 transition-all duration-300 origin-top overflow-hidden" 
+       [ngClass]="isMobileMenuOpen ? 'max-h-[500px] opacity-100 border-b border-white/5' : 'max-h-0 opacity-0 border-transparent'">
+    <div class="flex flex-col p-6 gap-6">
+      
+      <!-- Mobile Unauthenticated Nav -->
+      <nav class="flex flex-col gap-4 text-sm text-white/50 tracking-wider" *ngIf="!currentUser">
+        <a routerLink="/" fragment="about" class="hover:text-white transition-colors" (click)="isMobileMenuOpen = false">About Us</a>
+        <a routerLink="/" fragment="pricing" class="hover:text-white transition-colors" (click)="isMobileMenuOpen = false">Pricing</a>
+        <a routerLink="/" fragment="reviews" class="hover:text-white transition-colors" (click)="isMobileMenuOpen = false">Reviews</a>
+        <a routerLink="/" fragment="contact" class="hover:text-white transition-colors" (click)="isMobileMenuOpen = false">Contact</a>
+      </nav>
+
+      <!-- Mobile Authenticated Nav -->
+      <nav class="flex flex-col gap-4 text-sm text-white/50 tracking-wider" *ngIf="currentUser">
+        <a routerLink="/dashboard" class="hover:text-white transition-colors" (click)="isMobileMenuOpen = false">Dashboard</a>
+        <a routerLink="/cars" class="hover:text-white transition-colors" (click)="isMobileMenuOpen = false">Cars</a>
+        <a routerLink="/bookings" class="hover:text-white transition-colors" (click)="isMobileMenuOpen = false">Bookings</a>
+        <a routerLink="/profile" class="hover:text-white transition-colors" (click)="isMobileMenuOpen = false">Profile Settings</a>
+        <button class="text-left text-red-400 hover:text-red-300 transition-colors mt-2" (click)="logout(); isMobileMenuOpen = false">Sign Out</button>
+      </nav>
+
+      <!-- Mobile Auth Links -->
+      <div class="flex flex-col gap-4 pt-4 border-t border-white/10" *ngIf="!currentUser">
+        <a routerLink="/login" class="flex items-center justify-center gap-2 py-3 rounded-lg border border-white/10 text-white/70 hover:text-white hover:bg-white/5 transition-all" (click)="isMobileMenuOpen = false">
+          <i class="fa-solid fa-right-to-bracket text-[#e5d4a6]"></i> Sign In
+        </a>
+        <a routerLink="/register" class="flex items-center justify-center gap-2 py-3 rounded-lg bg-gradient-to-r from-[#e5d4a6] to-[#f4ecd8] text-[#1a1a1a] font-semibold hover:opacity-90 transition-opacity" (click)="isMobileMenuOpen = false">
+          <i class="fa-solid fa-user-plus"></i> Register
+        </a>
       </div>
 
     </div>

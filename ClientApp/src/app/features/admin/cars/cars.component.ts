@@ -52,7 +52,7 @@ import { Car } from '../../../core/models/car.model';
       <div class="cars-grid">
         <div class="car-card" *ngFor="let car of filteredCars">
           <div class="car-image">
-            <img [src]="car.images[0] || '/assets/images/car-placeholder.jpg'" [alt]="car.make + ' ' + car.model">
+            <img [src]="car.images[0] || '/assets/images/hero-car.jpg'" [alt]="car.make + ' ' + car.model">
             <div class="car-status" [ngClass]="getStatusClass(car.status)">
               {{ car.status | titlecase }}
             </div>
@@ -297,7 +297,7 @@ export class CarsComponent implements OnInit {
           longitude: -74.0060
         },
         status: 'available',
-        images: ['/assets/images/cars/toyota-camry.jpg'],
+        images: ['/assets/images/hero-car.jpg'],
         features: ['AC', 'Bluetooth', 'GPS'],
         availability: [],
         rating: 4.5,
@@ -328,7 +328,7 @@ export class CarsComponent implements OnInit {
           longitude: -118.2437
         },
         status: 'booked',
-        images: ['/assets/images/cars/honda-civic.jpg'],
+        images: ['/assets/images/hero-car.jpg'],
         features: ['AC', 'Bluetooth'],
         availability: [],
         rating: 4.2,

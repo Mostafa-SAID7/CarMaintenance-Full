@@ -3,12 +3,11 @@ import { Router, RouterOutlet, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 import { NotificationService } from '../../core/services/notification.service';
-import { NotificationCenterComponent } from '../../shared/components/notification-center/notification-center.component';
 
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule, NotificationCenterComponent],
+  imports: [CommonModule, RouterOutlet, RouterModule],
   templateUrl: './admin-layout.component.html',
 
 })

@@ -114,6 +114,13 @@ export class NavbarComponent implements OnInit {
   toggleNotificationMenu(): void {
     this.isNotificationMenuOpen = !this.isNotificationMenuOpen;
     this.isUserMenuOpen = false; // Close user menu if open
+    this.isMobileMenuOpen = false; // Close mobile menu if open
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    this.isUserMenuOpen = false;
+    this.isNotificationMenuOpen = false;
   }
 
   markNotificationAsRead(notificationId: number): void {

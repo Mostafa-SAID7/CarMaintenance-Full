@@ -1,96 +1,94 @@
-<div class="relative min-h-screen bg-[#0a0a0a] text-white overflow-hidden font-sans">
+<div class="relative min-h-screen text-white overflow-hidden font-sans" style="background-color: #000;">
   
   <!-- Subtle Gradient Background Glow -->
   <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/5 via-[#0a0a0a] to-[#0a0a0a] z-0"></div>
 
-  <!-- Main Hero Section -->
-  <main class="relative z-10 container mx-auto px-6 pt-12 pb-24 lg:pt-20 lg:pb-32 grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
-    
-    <!-- Left Column: Typography & CTA -->
-    <div class="flex flex-col gap-8 max-w-xl z-20">
-      <h1 class="text-5xl lg:text-7xl font-light leading-tight tracking-tight text-white/95">
+  <!-- Main Hero Section: Full-width canvas -->
+  <main class="relative z-10 w-full" style="height: 88vh; min-height: 560px;">
+
+    <!-- LEFT TEXT CONTENT -->
+    <div class="absolute left-0 top-0 h-full flex flex-col justify-center z-20" style="padding-left: 60px; max-width: 400px;">
+      <h1 class="font-light leading-tight tracking-tight text-white/95 mb-8" style="font-size: 3.4rem; line-height: 1.1;">
         Save on buying<br/>
         a car from<br/>
         abroad
       </h1>
       
-      <div class="flex items-start gap-4 text-white/60 text-sm leading-relaxed max-w-sm mt-4">
-        <!-- Circular arrow button (decorative) -->
-        <button class="shrink-0 flex items-center justify-center w-10 h-10 rounded-full border border-white/20 hover:bg-white/10 transition-colors">
-           <app-icon name="ArrowUpRight" class="w-4 h-4"></app-icon>
+      <div class="flex items-start gap-4 text-white/60 text-sm leading-relaxed mb-8" style="max-width: 280px;">
+        <button class="shrink-0 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10 transition-colors" style="width: 36px; height: 36px; min-width: 36px; margin-top: 2px;">
+          <i class="fa-solid fa-arrow-up-right" style="font-size: 10px; color: rgba(255,255,255,0.5);"></i>
         </button>
         <p>
-          Don't put off your plans for the future, 
-          contact us <strong>today</strong> to get a 
-          consultation and <strong>start your 
+          Don't put off your plans for the future,
+          contact us <strong class="text-white/80">today</strong> to get a
+          consultation and <strong class="text-white/80">start your
           journey to a new car!</strong>
         </p>
       </div>
 
-      <div class="mt-8">
-        <app-premium-button (onClick)="onRequestSubmit()">
-          <span class="flex items-center gap-2">
-            <!-- Key icon representation -->
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
-            Submit Request
-          </span>
-        </app-premium-button>
+      <app-premium-button (onClick)="onRequestSubmit()">
+        <span class="flex items-center gap-2">
+          <i class="fa-solid fa-key text-sm"></i>
+          Submit Request
+        </span>
+      </app-premium-button>
+    </div>
+
+    <!-- MOUNTAIN CARD — native div wrapper for correct absolute positioning -->
+    <div class="absolute z-10 pointer-events-none overflow-hidden rounded-3xl"
+         style="width: 170px; height: 225px; left: 43%; top: 5%;">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a] z-10"></div>
+      <img src="/assets/images/mountain-bg.jpg" alt="Mountain"
+           class="absolute inset-0 w-full h-full object-cover z-0" style="opacity: 0.65;" />
+      <div class="absolute inset-0 z-20 p-5 flex flex-col justify-start" 
+           style="background: rgba(10,10,10,0.35); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1);">
+        <p class="text-white/90 text-sm font-medium leading-snug">
+          delivered<br/>
+          from anywhere<br/>
+          in the world
+        </p>
       </div>
     </div>
 
-    <!-- Right Column: Visuals & Floating Cards -->
-    <div class="relative flex justify-center items-center h-[500px]">
-      
-      <!-- The Car Image -->
-      <div class="absolute z-30 scale-125 md:scale-150 right-[-10%] top-[10%] pointer-events-none">
-        <img src="/assets/images/hero-car.jpg" alt="Premium Black Sports Car" class="w-[800px] object-cover drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] mix-blend-screen" />
+    <!-- 7 DAYS CARD — native div wrapper, fully visible, not cut off -->
+    <div class="absolute z-10 pointer-events-none rounded-3xl flex flex-col justify-between"
+         style="width: 210px; height: 210px; left: 63%; top: 4%; padding: 24px; background: rgba(0,0,0,0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1);">
+      <div>
+        <h2 class="font-semibold text-white leading-none mb-2" style="font-size: 2.8rem;">7 days</h2>
+        <p class="text-white/50 text-sm leading-tight" style="max-width: 100px;">
+          average delivery speed
+        </p>
       </div>
-
-      <!-- Floating Stat Cards (Behind Car) -->
-      
-      <!-- Card 1: Mountain Bg -->
-      <app-glass-card class="absolute z-10 w-48 h-64 right-[40%] top-0 overflow-hidden border-white/10 rounded-3xl opacity-90">
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a] z-10"></div>
-        <img src="/assets/images/mountain-bg.jpg" alt="Mountain" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60" />
-        <div class="relative z-20 p-6 flex flex-col justify-start h-full">
-           <p class="text-white/80 text-sm font-medium leading-snug">
-             delivered<br/>
-             from anywhere<br/>
-             in the world
-           </p>
-        </div>
-      </app-glass-card>
-
-      <!-- Card 2: 7 Days Stat -->
-      <app-glass-card class="absolute z-20 w-64 h-64 right-[5%] top-[5%] p-8 flex flex-col justify-between border-white/10 rounded-3xl bg-black/40 backdrop-blur-md">
-        <div>
-          <h2 class="text-4xl font-semibold mb-2">7 days</h2>
-          <p class="text-white/50 text-sm leading-tight max-w-[120px]">
-            average delivery speed
-          </p>
-        </div>
-        
-        <!-- Glowing Green Triangle (Road representation) -->
-        <div class="relative mt-auto mx-auto w-24 h-24 flex items-end justify-center pb-2">
-           <!-- Road lines -->
-           <div class="absolute inset-0 border-l border-r border-white/10 transform rotate-12 left-4"></div>
-           <div class="absolute inset-0 border-l border-r border-white/10 transform -rotate-12 right-4"></div>
-           
-           <div class="w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-b-[25px] border-b-[#86efac] drop-shadow-[0_0_15px_rgba(134,239,172,0.6)] z-10 relative bottom-4"></div>
-        </div>
-      </app-glass-card>
-
-      <!-- Circular Carousel Controls (Bottom Right) -->
-      <div class="absolute z-40 bottom-[10%] right-[10%] flex items-center gap-4 bg-white/10 backdrop-blur-md p-2 rounded-full border border-white/10">
-        <button class="w-10 h-10 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors">
-          <app-icon name="ChevronLeft" class="w-5 h-5"></app-icon>
-        </button>
-        <button class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-          <app-icon name="ChevronRight" class="w-5 h-5"></app-icon>
-        </button>
+      <!-- Glowing Green Triangle + Road Lines -->
+      <div class="relative flex items-end justify-center" style="height: 70px;">
+        <div class="absolute" style="top: 0; bottom: 0; left: 30%; right: 30%; border-left: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); transform: rotate(14deg);"></div>
+        <div class="absolute" style="top: 0; bottom: 0; left: 30%; right: 30%; border-left: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); transform: rotate(-14deg);"></div>
+        <div style="width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 26px solid #86efac; filter: drop-shadow(0 0 14px rgba(134,239,172,1)); margin-bottom: 6px; position: relative; z-index: 10;"></div>
       </div>
-
     </div>
+
+    <!-- CAR IMAGE — clean generated image, white bg disappears with multiply blend on dark page -->
+    <div class="absolute z-30 pointer-events-none" style="left: 38%; right: -5%; top: 0; bottom: 0; mix-blend-mode: multiply;">
+      <img 
+        src="/assets/images/hero-car-clean.jpg" 
+        alt="Premium Black Sports Car" 
+        class="w-full h-full object-contain object-center"
+      />
+    </div>
+
+    <!-- CAROUSEL CONTROLS — bottom right -->
+    <div class="absolute z-40 flex items-center gap-2 rounded-full border border-white/10"
+         style="bottom: 8%; right: 5%; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); padding: 6px;">
+      <button class="rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+              style="width: 40px; height: 40px;">
+        <i class="fa-solid fa-chevron-left text-sm"></i>
+      </button>
+      <button class="rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-100 transition-colors"
+              style="width: 40px; height: 40px; box-shadow: 0 0 20px rgba(255,255,255,0.3);">
+        <i class="fa-solid fa-chevron-right text-sm"></i>
+      </button>
+    </div>
+
   </main>
 
   <!-- Features Section -->

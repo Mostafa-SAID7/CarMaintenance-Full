@@ -2,14 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PremiumButtonComponent } from '../../shared/components/premium-button/premium-button.component';
-import { GlassCardComponent } from '../../shared/components/glass-card/glass-card.component';
 import { ChevronRight, ArrowUpRight } from 'lucide-angular';
 import { IconComponent } from '../../shared/components/icons/icon.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, PremiumButtonComponent, GlassCardComponent, IconComponent],
+  imports: [CommonModule, RouterModule, PremiumButtonComponent, IconComponent],
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
