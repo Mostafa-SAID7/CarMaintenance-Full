@@ -1,13 +1,14 @@
-name: 🚀 Deploy
+name: 🔨 Build
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
 
 jobs:
-  deploy-production:
-    name: 🎯 Deploy to Production
+  backend-build:
+    name: 🔨 Build Backend
     runs-on: ubuntu-latest
     
     steps:
@@ -17,20 +18,21 @@ jobs:
       with:
         dotnet-version: '9.0.x'
         
+    - run: dotnet restore
+      
+    - run: dotnet build --configuration Release --no-restore
+
+  frontend-build:
+    name: 🔨 Build Frontend
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      
     - uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
         cache-dependency-path: 'ClientApp/package-lock.json'
         
-    - run: dotnet publish -c Release -o ./publish/backend
-      
     - run: cd ClientApp && npm ci && npm run build:prod
-      
-    - name: Deploy to production
-      run: |
-        echo "Deploying to production..."
-      env:
-        DEPLOY_KEY: ${{ secrets.PROD_DEPLOY_KEY }}
-      continue-on-error: true
-
