@@ -1,0 +1,107 @@
+name: 📊 Code Quality Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    - cron: '0 2 * * 0'  # Weekly on Sunday
+
+jobs:
+  sonarcloud:
+    name: 🔍 SonarCloud Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 🔧 Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: 🔧 Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        
+    - name: 📥 SonarCloud Scanner
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      continue-on-error: true
+
+  code-coverage:
+    name: 📈 Code Coverage Report
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'ClientApp/package-lock.json'
+        
+    - name: 🧪 Run Tests with Coverage
+      run: |
+        dotnet test /p:CollectCoverage=true /p:CoverageFormat=opencover
+        
+    - name: 📊 Upload Coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: '**/coverage.opencover.xml'
+        flags: unittests
+        name: codecov-umbrella
+
+  dependency-check:
+    name: 🔐 Dependency Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'ClientApp/package-lock.json'
+        
+    - name: 📦 Install Dependencies
+      run: |
+        cd ClientApp
+        npm ci
+        
+    - name: 🔐 Audit Dependencies
+      run: |
+        cd ClientApp
+        npm audit --production || true
+
+  lint-commit:
+    name: 📝 Commit Message Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 📋 Validate Commits
+      uses: wagoid/commitlint-github-action@v5
+      continue-on-error: true

@@ -1,20 +1,30 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
-
+name: "✨ Feature Request"
+about: "Suggest an idea for this project"
+title: "[FEATURE] "
+labels: ["enhancement", "needs-triage"]
+assignees: []
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## 📝 Description
+<!-- Provide a clear and concise description of the feature -->
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+## 🎯 Use Case
+<!-- Describe the use case and why this feature is needed -->
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+## 💡 Proposed Solution
+<!-- Describe how you think this feature should work -->
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+## 🔄 Alternative Solutions
+<!-- Describe any alternative solutions you've considered -->
+
+## 📊 Impact
+- **Priority**: Low / Medium / High / Critical
+- **Affects**: Backend / Frontend / Both
+- **Complexity**: Low / Medium / High
+
+## 📚 Additional Context
+<!-- Add any other context, examples, or references -->
+
+## 🔗 Related Issues
+<!-- Link any related issues or discussions -->

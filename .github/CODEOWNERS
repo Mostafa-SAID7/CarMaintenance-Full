@@ -1,0 +1,22 @@
+# Code Owners for Community Car Project
+# This file defines automatic code review assignment
+
+# Frontend (Angular)
+/ClientApp/                           @mostafa-said7
+
+# Backend (ASP.NET Core)
+/src/CommunityCar.Api/                @mostafa-said7
+/src/CommunityCar.Core/               @mostafa-said7
+/src/CommunityCar.Data/               @mostafa-said7
+
+# Tests
+/src/CommunityCar.Tests/              @mostafa-said7
+
+# Documentation
+/docs/                                @mostafa-said7
+README.md                             @mostafa-said7
+
+# Configuration files
+.github/                              @mostafa-said7
+*.yml                                 @mostafa-said7
+*.yaml                                @mostafa-said7

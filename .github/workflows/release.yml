@@ -1,0 +1,79 @@
+name: 🚀 Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+
+jobs:
+  release:
+    name: 📦 Create Release Build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'ClientApp/package-lock.json'
+        
+    - name: 📝 Get Version
+      id: version
+      run: |
+        if [[ "${{ github.event_name }}" == "push" ]]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+        else
+          VERSION=${{ github.event.inputs.version }}
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        
+    - name: 🔨 Build Backend Release
+      run: dotnet publish -c Release -o ./publish/backend --version-suffix "${{ steps.version.outputs.version }}"
+      
+    - name: 🔨 Build Frontend Release
+      run: |
+        cd ClientApp
+        npm ci
+        npm run build:prod
+        
+    - name: 📦 Package Backend
+      run: |
+        cd ./publish/backend
+        zip -r ../backend-v${{ steps.version.outputs.version }}.zip .
+        
+    - name: 📦 Package Frontend
+      run: |
+        cd ClientApp/dist
+        zip -r ../../frontend-v${{ steps.version.outputs.version }}.zip .
+        
+    - name: 🏷️ Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./publish/backend-v${{ steps.version.outputs.version }}.zip
+          ./frontend-v${{ steps.version.outputs.version }}.zip
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: 📊 Upload Release Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-builds-${{ steps.version.outputs.version }}
+        path: |
+          ./publish/backend-v${{ steps.version.outputs.version }}.zip
+          ./frontend-v${{ steps.version.outputs.version }}.zip

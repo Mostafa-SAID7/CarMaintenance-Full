@@ -1,0 +1,166 @@
+name: 🔄 CI (Continuous Integration)
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # ============== BACKEND TESTS ==============
+  backend-tests:
+    name: 🧪 Backend Tests (.NET)
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: 📦 Restore Dependencies
+      run: dotnet restore
+      
+    - name: 🔨 Build Backend
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: 🧪 Run Backend Tests
+      run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx" /p:CollectCoverage=true /p:CoverageFormat=cobertura
+      
+    - name: 📊 Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: backend-test-results
+        path: '**/test-results.trx'
+        
+    - name: 📈 Upload Coverage Reports
+      uses: codecov/codecov-action@v3
+      with:
+        files: '**/coverage.cobertura.xml'
+        flags: backend
+        name: backend-coverage
+
+  # ============== FRONTEND TESTS ==============
+  frontend-tests:
+    name: 🧪 Frontend Tests (Angular)
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'ClientApp/package-lock.json'
+        
+    - name: 📦 Install Dependencies
+      run: |
+        cd ClientApp
+        npm ci
+        
+    - name: 🔨 Build Frontend
+      run: |
+        cd ClientApp
+        npm run build:prod
+        
+    - name: 🧪 Run Frontend Tests
+      run: |
+        cd ClientApp
+        npm run test:ci
+        
+    - name: 📊 Upload Coverage Reports
+      uses: codecov/codecov-action@v3
+      with:
+        files: './ClientApp/coverage/cobertura-coverage.xml'
+        flags: frontend
+        name: frontend-coverage
+
+  # ============== LINTING ==============
+  linting:
+    name: 📝 Code Quality & Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'ClientApp/package-lock.json'
+        
+    - name: 📦 Install Dependencies
+      run: |
+        cd ClientApp
+        npm ci
+        
+    - name: 📝 Run ESLint
+      run: |
+        cd ClientApp
+        npm run lint --if-present || true
+        
+    - name: 🎨 Check Code Formatting
+      run: |
+        cd ClientApp
+        npm run format:check --if-present || true
+
+  # ============== SECURITY CHECKS ==============
+  security:
+    name: 🔐 Security Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔒 Dependency Check
+      uses: dependabot/fetch-metadata@v1
+      with:
+        github-token: '${{ secrets.GITHUB_TOKEN }}'
+      continue-on-error: true
+
+  # ============== BUILD VERIFICATION ==============
+  build-verification:
+    name: ✅ Build Verification
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'ClientApp/package-lock.json'
+        
+    - name: 📦 Restore .NET Dependencies
+      run: dotnet restore
+      
+    - name: 📦 Install Node Dependencies
+      run: |
+        cd ClientApp
+        npm ci
+        
+    - name: ✅ Verify Backend Build
+      run: dotnet build --configuration Release
+      
+    - name: ✅ Verify Frontend Build
+      run: |
+        cd ClientApp
+        npm run build:prod
