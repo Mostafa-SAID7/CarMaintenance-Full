@@ -40,7 +40,7 @@ jobs:
         zip -r ../../frontend-v${{ steps.version.outputs.version }}.zip .
       shell: bash
       
-    - uses: softprops/action-gh-release@v1
+    - uses: softprops/action-gh-release@v3
       with:
         files: |
           ./publish/backend-v${{ steps.version.outputs.version }}.zip
