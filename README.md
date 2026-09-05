@@ -1,135 +1,238 @@
-# Community Car
+# 🚗 Community Car
 
-A full-stack application for community car sharing and management.
+> A modern full-stack car sharing and rental management platform built with cutting-edge technologies.
 
-## Project Structure
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-9-blue)](https://dotnet.microsoft.com/)
+[![Angular](https://img.shields.io/badge/Angular-19-red)](https://angular.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)](https://nodejs.org/)
 
-This project consists of:
-- **Backend API**: ASP.NET Core Web API (.NET 9)
-- **Frontend**: Angular 19 client application
-- **Tests**: Unit and integration tests
+---
 
-## Backend (ASP.NET Core)
+## 📋 Overview
 
-### Features
-- JWT Authentication with refresh tokens
-- Role-based authorization
-- OTP verification
-- Social login integration
-- Audit logging
-- Rate limiting
-- Security headers
-- Email services
+Community Car is a comprehensive car sharing platform that connects users with available vehicles. The application features a robust backend API and a modern, responsive frontend interface.
 
-### Technologies
-- ASP.NET Core 9
-- Entity Framework Core
-- SQL Server
-- JWT Bearer Authentication
-- AutoMapper
-- FluentValidation
-- Serilog
+| Component | Technology | Version |
+|-----------|-----------|---------|
+| **Backend API** | ASP.NET Core | 9 |
+| **Frontend** | Angular | 19 |
+| **Database** | SQL Server | Latest |
+| **Authentication** | JWT + Refresh Tokens | - |
 
-## Frontend (Angular 19)
+---
 
-### Features
-- Modern Angular 19 application
-- Angular Material UI components
-- Lazy-loaded modules
-- JWT authentication
-- Reactive forms
-- HTTP interceptors
-- Route guards
-- Responsive design
+## ✨ Key Features
 
-### Technologies
-- Angular 19
-- Angular Material
-- RxJS
-- TypeScript
-- SCSS
+### 🔐 Backend (ASP.NET Core)
+- ✅ JWT Authentication with refresh token rotation
+- ✅ Role-based access control (RBAC)
+- ✅ OTP verification for added security
+- ✅ Social login integration (OAuth)
+- ✅ Comprehensive audit logging
+- ✅ Rate limiting protection
+- ✅ Security headers enforcement
+- ✅ Email notification services
 
-## Getting Started
+### 🎨 Frontend (Angular 19)
+- ✅ Modern responsive design
+- ✅ Material Design UI components
+- ✅ Code splitting & lazy loading
+- ✅ Advanced reactive forms
+- ✅ HTTP interceptors & error handling
+- ✅ Route protection with guards
+- ✅ Real-time notifications
+- ✅ Dark mode support
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+```
+ASP.NET Core 9 | Entity Framework Core | SQL Server
+AutoMapper | FluentValidation | Serilog | JWT Bearer
+```
+
+### Frontend
+```
+Angular 19 | Angular Material | RxJS | TypeScript | SCSS | Tailwind CSS
+```
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- .NET 9 SDK
-- Node.js 18+
-- npm or yarn
-- SQL Server (or other supported database)
+```bash
+✓ .NET 9 SDK
+✓ Node.js 18+
+✓ SQL Server 2019+
+✓ npm or yarn package manager
+```
 
 ### Backend Setup
-1. Navigate to `src/CommunityCar.Api`
-2. Update `appsettings.json` with your database connection
-3. Run migrations: `dotnet ef database update`
-4. Start the API: `dotnet run`
+```bash
+# 1. Navigate to backend directory
+cd src/CommunityCar.Api
+
+# 2. Configure database connection
+# Edit appsettings.json with your SQL Server connection string
+
+# 3. Apply migrations
+dotnet ef database update
+
+# 4. Start the development server
+dotnet run
+# API runs on: https://localhost:5001
+```
 
 ### Frontend Setup
-1. Navigate to `ClientApp`
-2. Install dependencies: `npm install`
-3. Start development server: `npm start`
-4. Build for production: `npm run build:prod`
+```bash
+# 1. Navigate to frontend directory
+cd ClientApp
 
-## API Endpoints
+# 2. Install dependencies
+npm install
 
-### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/refresh` - Refresh access token
-- `POST /api/auth/forgot-password` - Request password reset
-- `POST /api/auth/reset-password` - Reset password
+# 3. Start development server
+npm start
+# App runs on: http://localhost:4200
 
-### Profile
-- `GET /api/profile` - Get user profile
-- `PUT /api/profile` - Update user profile
+# 4. Build for production
+npm run build:prod
+```
 
-## Testing
+---
+
+## 📡 API Documentation
+
+### Authentication Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/auth/login` | User login with credentials |
+| `POST` | `/api/auth/register` | Create new user account |
+| `POST` | `/api/auth/refresh` | Refresh access token |
+| `POST` | `/api/auth/forgot-password` | Request password reset |
+| `POST` | `/api/auth/reset-password` | Complete password reset |
+
+### User Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/profile` | Get current user profile |
+| `PUT` | `/api/profile` | Update user profile information |
+| `GET` | `/api/profile/history` | Get user booking history |
+
+---
+
+## 🧪 Testing
 
 ### Backend Tests
 ```bash
 cd src/CommunityCar.Tests
-dotnet test
+dotnet test                    # Run all tests
+dotnet test --filter "Category=Unit"  # Run specific tests
+dotnet test /p:CollectCoverage=true   # With coverage report
 ```
 
 ### Frontend Tests
 ```bash
 cd ClientApp
-npm run test:ci  # Headless testing
-npm test         # Interactive testing
+
+# Headless (CI/CD)
+npm run test:ci
+
+# Interactive watch mode
+npm test
+
+# With coverage report
+npm run test:coverage
 ```
 
-## Development
+---
 
-### Code Style
-- Backend: Follow C# coding standards
-- Frontend: Follow Angular style guide
-- Use meaningful commit messages
-- Write tests for new features
+## 💻 Development Workflow
 
-### Branching Strategy
-- `main` - Production ready code
-- `develop` - Development branch
-- Feature branches: `feature/feature-name`
+### Code Standards
+- **Backend**: Follow [C# Coding Conventions](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
+- **Frontend**: Follow [Angular Style Guide](https://angular.io/guide/styleguide)
+- **Commits**: Use conventional commit messages (`feat:`, `fix:`, `docs:`, etc.)
+- **Testing**: Aim for >80% code coverage
 
-## Deployment
+### Branch Strategy
+```
+main (production) ← release branches ← develop ← feature/fix branches
+```
 
-### Backend
+- `main` → Production-ready, tagged releases
+- `develop` → Integration branch for next release
+- `feature/*` → New features
+- `fix/*` → Bug fixes
+- `docs/*` → Documentation updates
+
+---
+
+## 📦 Deployment
+
+### Production Build - Backend
 ```bash
 dotnet publish -c Release -o ./publish
+# Output: ./publish folder with all assets
 ```
 
-### Frontend
+### Production Build - Frontend
 ```bash
 npm run build:prod
+# Output: ./dist/ClientApp (ready for CDN/static hosting)
 ```
 
-## Contributing
+### Docker Support
+```bash
+# Coming soon: Docker containerization
+docker build -t community-car:latest .
+docker run -p 5001:5001 community-car:latest
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+---
 
-## License
+## 🤝 Contributing
 
-This project is licensed under the MIT License.
+We welcome contributions! Here's how:
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+3. **Make** your changes and commit: `git commit -m 'feat: add amazing feature'`
+4. **Push** to the branch: `git push origin feature/amazing-feature`
+5. **Open** a Pull Request with detailed description
+
+### Pull Request Guidelines
+- Include description of changes
+- Link related issues
+- Add/update tests as needed
+- Update documentation if required
+- Follow code style guidelines
+
+---
+
+## 📝 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 📧 Support & Contact
+
+- 📬 Email: support@communitycar.com
+- 🐛 Issues: [GitHub Issues](../../issues)
+- 💬 Discussions: [GitHub Discussions](../../discussions)
+- 📖 Documentation: [Wiki](../../wiki)
+
+---
+
+<div align="center">
+
+**Built with ❤️ by the Community Car Team**
+
+[⬆ Back to Top](#-community-car)
+
+</div>
