@@ -4,15 +4,12 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { User } from '../../../core/models/user.model';
-import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
-import { TranslatePipe } from '../../pipes/translate.pipe';
-import { I18nService } from '../../../core/services/i18n.service';
 import { NotificationsStore } from '../../../core/state/notifications.store';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSwitcherComponent, TranslatePipe],
+  imports: [CommonModule, RouterModule],
   templateUrl: './navbar.component.html',
 
 })
@@ -59,7 +56,7 @@ export class NavbarComponent implements OnInit {
     }
   ];
 
-  private i18nService = inject(I18nService);
+  // No i18n Service Needed
 
   constructor(
     private authService: AuthService,

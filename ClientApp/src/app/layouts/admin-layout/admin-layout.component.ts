@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -8,7 +8,7 @@ import { NotificationCenterComponent } from '../../shared/components/notificatio
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NotificationCenterComponent],
+  imports: [CommonModule, RouterOutlet, RouterModule, NotificationCenterComponent],
   templateUrl: './admin-layout.component.html',
 
 })

@@ -45,17 +45,17 @@ export class MainLayoutComponent implements OnInit {
   }
 
   private updateLayoutVisibility(url: string): void {
+    // Strip query params and fragments to correctly identify the base route
+    const cleanUrl = url.split('?')[0].split('#')[0];
+
     // Check if current route is authenticated
     const isAuthenticatedRoute = this.authenticatedRoutes.some(route =>
-      url.startsWith(route) || url === route
+      cleanUrl.startsWith(route) || cleanUrl === route
     );
 
-    // Special case for home page - show minimal layout
-    const isHomePage = url === '/' || url === '/home';
-
-    this.showNavbar = isAuthenticatedRoute;
-    this.showFooter = isAuthenticatedRoute || isHomePage;
-    this.showChatWidget = isAuthenticatedRoute || isHomePage;
-    this.showScrollToTop = isAuthenticatedRoute || isHomePage;
+    this.showNavbar = true;
+    this.showFooter = true; // Always show footer on main layout pages (home, about, dashboard, etc)
+    this.showChatWidget = isAuthenticatedRoute;
+    this.showScrollToTop = true;
   }
 }

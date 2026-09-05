@@ -1,59 +1,68 @@
-<footer class="bg-gradient-to-br from-background to-muted border-t border-border text-foreground mt-auto relative overflow-hidden" role="contentinfo">
-  <!-- Top accent line -->
-  <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-primary/50 to-primary opacity-30"></div>
-
-  <div class="max-w-[1200px] mx-auto px-4">
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 py-12 md:py-8 lg:grid-cols-[2fr_1fr_1fr_1.5fr]">
-      <div class="animate-fade-in-up [animation-fill-mode:both] delay-[100ms] lg:col-span-1">
-        <div class="mb-4">
-          <h3 class="text-2xl font-bold mb-2 bg-gradient-to-br from-primary to-primary/80 bg-clip-text text-transparent">{{ 'navigation.home' | translate }}</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">{{ 'footer.subtitle' | translate }}</p>
-        </div>
-        <div class="flex gap-4 mt-6 justify-center lg:justify-start" role="list" aria-label="Social media links">
+<footer class="bg-[#0a0a0a] border-t border-white/5 text-white/70 relative mt-auto">
+  <div class="container mx-auto px-6 py-12 md:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+      
+      <!-- Brand & Socials -->
+      <div class="lg:col-span-1">
+        <a routerLink="/" class="text-xl font-bold tracking-widest text-white/90 inline-block mb-4">
+          CARGO
+        </a>
+        <p class="text-sm text-white/50 leading-relaxed mb-6">
+          Premium car rentals for the modern traveler. Experience luxury and performance on your terms.
+        </p>
+        <div class="flex gap-4">
           <a *ngFor="let link of socialLinks; trackBy: trackBySocialLink"
              [href]="link.url"
-             class="relative flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground border border-border transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-lg hover:bg-gradient-to-br hover:from-primary hover:to-primary/80 hover:text-primary-foreground hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 active:-translate-y-0.5 active:scale-105 group"
-             [attr.aria-label]="link.name + ' - Opens in new tab'"
+             class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-[#e5d4a6] hover:border-[#e5d4a6] transition-colors focus:outline-none focus:ring-1 focus:ring-[#e5d4a6]"
              target="_blank"
              rel="noopener noreferrer"
-             role="listitem">
-            <i class="fa-brands fa-{{link.icon}} text-lg transition-all duration-200 group-hover:scale-110"></i>
-            <span class="absolute bottom-full left-1/2 -translate-x-1/2 translate-y-2 bg-popover text-popover-foreground px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap opacity-0 invisible transition-all duration-200 shadow-md border border-border z-[1000] group-hover:opacity-100 group-hover:visible group-hover:-translate-y-2 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:border-t-popover">{{ link.name }}</span>
+             [attr.aria-label]="link.name">
+            <i class="fa-brands fa-{{link.icon}}"></i>
           </a>
         </div>
       </div>
 
-      <ng-container *ngFor="let section of footerSections; let i = index; trackBy: trackBySection">
-        <nav class="animate-fade-in-up [animation-fill-mode:both]" [ngStyle]="{'animation-delay': ((i + 2) * 100) + 'ms'}" [attr.aria-labelledby]="'footer-' + section.title.toLowerCase().replace(' ', '-')">
-          <h4 [id]="'footer-' + section.title.toLowerCase().replace(' ', '-')" class="text-lg font-semibold text-foreground mb-4 relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-[2px] after:bg-gradient-to-r after:from-primary after:to-primary/50 after:rounded-[1px]">{{ section.title | translate }}</h4>
-          <ul role="list" class="space-y-2">
-            <li *ngFor="let link of section.links; trackBy: trackByLink" role="listitem">
-              <a [routerLink]="link.url" routerLinkActive="text-primary font-medium" [attr.aria-label]="link.name | translate" class="text-sm text-muted-foreground no-underline transition-all duration-200 hover:text-primary hover:translate-x-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 relative before:content-[''] before:absolute before:-left-4 before:top-1/2 before:-translate-y-1/2 before:w-0 before:h-[1px] before:bg-primary before:transition-all before:duration-200 hover:before:w-2 break-words">{{ link.name | translate }}</a>
-            </li>
-          </ul>
-        </nav>
-      </ng-container>
+      <!-- Links Sections -->
+      <nav *ngFor="let section of footerSections; trackBy: trackBySection">
+        <h4 class="text-sm font-semibold text-white tracking-widest uppercase mb-6">{{ section.title }}</h4>
+        <ul class="space-y-4">
+          <li *ngFor="let link of section.links; trackBy: trackByLink">
+            <a [routerLink]="link.url" 
+               routerLinkActive="text-[#e5d4a6]"
+               class="text-sm text-white/50 hover:text-white transition-colors focus:outline-none">
+              {{ link.name }}
+            </a>
+          </li>
+        </ul>
+      </nav>
 
-      <div class="animate-fade-in-up [animation-fill-mode:both] delay-[400ms]">
-        <h4 class="text-lg font-semibold text-foreground mb-4 relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-[2px] after:bg-gradient-to-r after:from-primary after:to-primary/50 after:rounded-[1px]">{{ 'footer.contactInfo' | translate }}</h4>
-        <address class="not-italic space-y-3">
-          <p class="text-sm text-muted-foreground break-words"><strong class="text-foreground font-semibold">{{ 'footer.email' | translate }}:</strong> <a href="mailto:support@communitycar.com" class="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">support&#64;communitycar.com</a></p>
-          <p class="text-sm text-muted-foreground break-words"><strong class="text-foreground font-semibold">{{ 'footer.phone' | translate }}:</strong> <a href="tel:+15551234567" class="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">+1 (555) 123-4567</a></p>
-          <p class="text-sm text-muted-foreground break-words"><strong class="text-foreground font-semibold">{{ 'footer.address' | translate }}:</strong> 123 Car Street, Auto City, AC 12345</p>
+      <!-- Contact Info -->
+      <div>
+        <h4 class="text-sm font-semibold text-white tracking-widest uppercase mb-6">Contact</h4>
+        <address class="not-italic space-y-4 text-sm text-white/50">
+          <p>
+            <a href="mailto:hello@cargo.com" class="hover:text-white transition-colors">hello&#64;cargo.com</a>
+          </p>
+          <p>
+            <a href="tel:+15551234567" class="hover:text-white transition-colors">+1 (555) 123-4567</a>
+          </p>
+          <p>
+            123 Luxury Drive<br/>
+            Beverly Hills, CA 90210
+          </p>
         </address>
       </div>
+
     </div>
 
-    <div class="border-t border-border py-6 mt-8">
-      <div class="flex flex-col md:flex-row justify-between items-center flex-wrap gap-4 text-center">
-        <p class="text-sm text-muted-foreground m-0">&copy; {{ currentYear }} {{ 'navigation.home' | translate }}. {{ 'footer.rights' | translate }}</p>
-        <nav class="flex items-center justify-center gap-4" aria-label="Legal links">
-          <a [routerLink]="'/privacy-policy'" routerLinkActive="text-primary font-medium" class="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">{{ 'footer.privacyPolicy' | translate }}</a>
-          <span class="text-sm text-muted-foreground/50" aria-hidden="true">|</span>
-          <a [routerLink]="'/terms-of-service'" routerLinkActive="text-primary font-medium" class="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">{{ 'footer.termsOfService' | translate }}</a>
-          <span class="text-sm text-muted-foreground/50" aria-hidden="true">|</span>
-          <a [routerLink]="'/cookies'" routerLinkActive="text-primary font-medium" class="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm">{{ 'footer.cookiePolicy' | translate }}</a>
-        </nav>
+    <!-- Bottom Bar -->
+    <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-white/30">
+        &copy; {{ currentYear }} Cargo. All rights reserved.
+      </p>
+      <div class="flex gap-6 text-xs text-white/30">
+        <a routerLink="/privacy-policy" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a routerLink="/terms-of-service" class="hover:text-white transition-colors">Terms of Service</a>
       </div>
     </div>
   </div>

@@ -111,9 +111,16 @@ export class AuthService {
     return user ? user.isEmailVerified ?? false : false;
   }
 
-  private decodeToken(token: string): User {
-    // Simple JWT decode (in real app, use a library like jwt-decode)
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.user;
+  private decodeToken(token: string): User | null {
+    try {
+      // Simple JWT decode (in real app, use a library like jwt-decode)
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.user;
+    } catch (e) {
+      console.error('Failed to decode token, clearing it.', e);
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      return null;
+    }
   }
 }

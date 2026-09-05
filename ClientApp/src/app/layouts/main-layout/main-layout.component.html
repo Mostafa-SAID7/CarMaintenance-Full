@@ -1,10 +1,10 @@
-<div class="min-h-screen flex flex-col bg-gray-50">
+<div class="min-h-screen flex flex-col bg-[#0a0a0a] text-foreground">
   <app-navbar *ngIf="showNavbar" class="flex-none"></app-navbar>
 
   <!-- Network Status Indicator -->
   <app-network-status></app-network-status>
 
-  <main class="flex-grow w-full max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300">
+  <main class="flex-grow w-full transition-all duration-300">
     <router-outlet></router-outlet>
   </main>
 

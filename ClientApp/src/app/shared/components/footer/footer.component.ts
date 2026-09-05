@@ -1,27 +1,17 @@
 import { Component, TrackByFunction } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe } from '../../pipes/translate.pipe';
 
-/**
- * Interface for basic footer links
- */
 interface FooterLink {
   name: string;
   url: string;
 }
 
-/**
- * Interface for footer sections
- */
 interface FooterSection {
   title: string;
   links: readonly FooterLink[];
 }
 
-/**
- * Interface for social media links extending basic footer links
- */
 interface SocialLink extends FooterLink {
   icon: string;
 }
@@ -29,15 +19,12 @@ interface SocialLink extends FooterLink {
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe],
+  imports: [CommonModule, RouterLink],
   templateUrl: './footer.component.html',
-
 })
 export class FooterComponent {
-  /** Current year for copyright display */
   readonly currentYear = new Date().getFullYear();
 
-  /** Social media links */
   readonly socialLinks: readonly SocialLink[] = [
     { name: 'Facebook', url: '#', icon: 'facebook' },
     { name: 'Twitter', url: '#', icon: 'twitter' },
@@ -45,36 +32,28 @@ export class FooterComponent {
     { name: 'LinkedIn', url: '#', icon: 'linkedin-in' }
   ];
 
-  /** Footer sections for dynamic rendering */
   readonly footerSections: readonly FooterSection[] = [
     {
-      title: 'footer.quickLinks',
+      title: 'Company',
       links: [
-        { name: 'footer.aboutUs', url: '/about-us' },
-        { name: 'footer.contact', url: '/contact' },
-        { name: 'footer.privacyPolicy', url: '/privacy-policy' },
-        { name: 'footer.termsOfService', url: '/terms-of-service' },
-        { name: 'footer.faq', url: '/faq' }
+        { name: 'About Us', url: '/about-us' },
+        { name: 'Contact', url: '/contact' },
+        { name: 'Careers', url: '/careers' },
+        { name: 'FAQ', url: '/faq' }
       ]
     },
     {
-      title: 'footer.cars',
+      title: 'Services',
       links: [
-        { name: 'footer.browseCars', url: '/browse-cars' },
-        { name: 'footer.addYourCar', url: '/add-your-car' },
-        { name: 'footer.howItWorks', url: '/how-it-works' },
-        { name: 'footer.pricing', url: '/pricing' }
+        { name: 'Browse Cars', url: '/browse-cars' },
+        { name: 'List Your Car', url: '/add-your-car' },
+        { name: 'How it Works', url: '/how-it-works' },
+        { name: 'Pricing', url: '/pricing' }
       ]
     }
   ];
 
-  /** TrackBy function for ngFor optimization */
   trackByLink: TrackByFunction<FooterLink> = (index: number, item: FooterLink) => item.url;
-
-  /** TrackBy function for social links */
   trackBySocialLink: TrackByFunction<SocialLink> = (index: number, item: SocialLink) => item.icon;
-
-  /** TrackBy function for sections */
   trackBySection: TrackByFunction<FooterSection> = (index: number, item: FooterSection) => item.title;
 }
-
