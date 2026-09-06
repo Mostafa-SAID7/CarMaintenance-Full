@@ -9,7 +9,8 @@
   <meta name="keywords" content="car rental, rent a car, car sharing, community car">
   <meta name="author" content="Community Car">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#007bff">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="color-scheme" content="dark">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -34,52 +35,62 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Google Fonts (async load non-critical) -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://fonts.googleapis.com/icon?family=Material+Icons" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <!-- Font Awesome (async) -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Tailwind CSS Configuration (Removed CDN) -->
-
-  <!-- Preload critical resources -->
-  <link rel="preload" href="assets/styles/theme.scss" as="style">
-  <link rel="preload" href="assets/styles/variables.scss" as="style">
-</head>
-<body>
-  <app-root></app-root>
-
-  <!-- Loading spinner for initial load -->
-  <div id="initial-loader" style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  ">
-    <div style="
-      width: 40px;
-      height: 40px;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #007bff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    "></div>
-  </div>
-
+  <!-- Inline Critical CSS for First Paint -->
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+      overflow-y: scroll;
+    }
+
+    body {
+      background-color: #0a0a0a;
+      color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    app-root {
+      display: block;
+      min-height: 100vh;
+    }
+
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
     }
 
     #initial-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 1;
       transition: opacity 0.3s ease-out;
     }
 
@@ -87,19 +98,79 @@
       opacity: 0;
       pointer-events: none;
     }
+
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #e5d4a6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
+
+  <!-- Noscript fallback -->
+  <noscript>
+    <p>This application requires JavaScript to be enabled.</p>
+  </noscript>
+</head>
+<body>
+  <app-root></app-root>
+
+  <!-- Minimal Loading Spinner for Initial Load -->
+  <div id="initial-loader">
+    <div class="spinner"></div>
+  </div>
 
   <script>
     // Hide loading spinner when Angular app is ready
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const loader = document.getElementById('initial-loader');
+    (function() {
+      const loader = document.getElementById('initial-loader');
+      
+      // Auto-hide after reasonable timeout (fallback)
+      const timeout = setTimeout(hideLoader, 5000);
+      
+      // Listen for Angular bootstrap
+      window.addEventListener('DOMContentLoaded', function() {
+        clearTimeout(timeout);
+      }, { once: true });
+      
+      // Observe when app-root is populated
+      if (loader && window.MutationObserver) {
+        const observer = new MutationObserver(function(mutations) {
+          const appRoot = document.querySelector('app-root');
+          if (appRoot && appRoot.children.length > 0) {
+            hideLoader();
+            observer.disconnect();
+          }
+        });
+        
+        const appRoot = document.querySelector('app-root');
+        if (appRoot) {
+          observer.observe(appRoot, { childList: true, subtree: true });
+        }
+      }
+      
+      function hideLoader() {
         if (loader) {
           loader.classList.add('hide');
-          setTimeout(() => loader.remove(), 300);
+          setTimeout(() => {
+            if (loader && loader.parentNode) {
+              loader.parentNode.removeChild(loader);
+            }
+          }, 300);
         }
-      }, 100);
-    });
+      }
+    })();
   </script>
 </body>
 </html>
